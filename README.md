@@ -24,8 +24,7 @@ The summarize, the algorithm works like this :
 - For each test sample
     - Compute its distance to every training sample using a metric
     - Select the k nearest neighbors with respect to the currently processed sample
-    - TO DO
-    - Choose the class whose number of votes is the highest as the predicted class for this test sample
+    - Choose the class that has the highest number of nearest neighbors as the predicted class
 
 - Compute the results such as accuracy, F1-score and recall based on the number of true positives, false positives and false negatives
 ```
@@ -66,5 +65,5 @@ This software uses a single file C library for .jpg image decompression and resi
 
 https://github.com/nothings/stb/blob/master/stb_image_resize2.h
 
-Finally, I also want to thank Sparh Gupta, a Kaggler, for providing the flower dataset used here.
+Finally, I also want to thank Sparsh Gupta, a Kaggler, for providing the flower dataset used here.
 
