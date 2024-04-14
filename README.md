@@ -58,7 +58,7 @@ make
 - You can use a different dataset, but you will have to modify some code
 
 # What will be next ?
-- In the future, my goal would be to increase what can be done with this software, for example by increasing the number of available metricc (like adding cosine similarity)
+- In the future, my goal would be to increase what can be done with this software, for example by increasing the number of available metrics (like adding cosine similarity)
 - The idea would be to implement what is available in the KNeighborsClassifier object in scikit-learn, so even to implement the Ball-Tree of KD-Tree search for the k nearest neighbors
 
 # Acknowledgements
