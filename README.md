@@ -49,7 +49,7 @@ cmake ..
 make
 ./knn_images
 ```
-- After waiting a few seconds until processing reaches 100%, you should be able to see to results in the terminal
+- After waiting a few seconds until processing reaches 100%, you should be able to see the results in the terminal
 
 # What can you do to experiment ?
 - You can change the metric used for computing distances: the available ones are Manhattan, euclidean and Minkowski (a high p order can result in long computation)
