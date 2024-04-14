@@ -54,7 +54,7 @@ make
 ## What can you do to experiment ?
 - You can change the metric used for computing distances: the available ones are Manhattan, euclidean and Minkowski (a high p order can result in long computation)
 - You can change the p order for the Minkowski metric
-- You can use the wieghted k-Nearest Neighbors classifying
+- You can use the weighted version (inverse of distances)
 - You can use a different dataset, but you will have to modify some code because the file structure will be different
 
 ## What will be next ?
