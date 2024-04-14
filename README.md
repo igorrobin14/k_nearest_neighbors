@@ -14,7 +14,7 @@ https://scikit-learn.org/stable/auto_examples/datasets/plot_iris_dataset.html
 
 The goal here was to understand a bit better how the k-NN algorithm works. In fact, before programming it, I had studied it in class and had used it with Python via scikit-learn, but I was kind of frustrated to see that everything was already done for me and could be written with 10 lines of code. I wanted to truly dive in the algorithm, and what could be better than programming it ?
 
-The summarize, the algorithm works like this :
+To summarize, the algorithm works like this :
 ```
 - Load the dataset and store it in a an array of samples (which can be images)
 (- In the case of images, resize them so that they all have the same reasonable size)
