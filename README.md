@@ -51,16 +51,16 @@ make
 ```
 - After waiting a few seconds until processing reaches 100%, you should be able to see the results in the terminal
 
-# What can you do to experiment ?
+## What can you do to experiment ?
 - You can change the metric used for computing distances: the available ones are Manhattan, euclidean and Minkowski (a high p order can result in long computation)
 - You can change the p order for the Minkowski metric
 - You can use a different dataset, but you will have to modify some code because the file structure will be different
 
-# What will be next ?
+## What will be next ?
 - In the future, my goal would be to have more features available is this software, for example by increasing the number of available metrics (like adding cosine similarity)
 - The idea would be to implement what is available in the KNeighborsClassifier object in scikit-learn, so even to implement the Ball-Tree or KD-Tree search for the k nearest neighbors
 
-# Acknowledgements
+## Acknowledgements
 This software uses a single file C library for .jpg image decompression and resizing called stb_resize_image2 (.h) which was written by Jeff Roberts and Jorge L Rodriguez. I want to thank them for putting this library in the public domain and thus letting people use it. The library can be found here on Sean Barrett's GitHub:
 
 https://github.com/nothings/stb/blob/master/stb_image_resize2.h
@@ -68,5 +68,8 @@ https://github.com/nothings/stb/blob/master/stb_image_resize2.h
 Finally, I also want to thank Sparsh Gupta, a Kaggler, for providing the flower dataset used here.
 
 Any demand, remark, or desire of contribution regarding this project would be welcomed ! You can send me an email at Igor.ROBIN@etu.isima.fr
+
+## Work in progress
+This software is still in development
 
 
