@@ -54,11 +54,13 @@ make
 ## What can you do to experiment ?
 - You can change the metric used for computing distances: the available ones are Manhattan, euclidean and Minkowski (a high p order can result in long computation)
 - You can change the p order for the Minkowski metric
+- You can use the wieghted k-Nearest Neighbors classifying
 - You can use a different dataset, but you will have to modify some code because the file structure will be different
 
 ## What will be next ?
 - In the future, my goal would be to have more features available is this software, for example by increasing the number of available metrics (like adding cosine similarity)
 - The idea would be to implement what is available in the KNeighborsClassifier object in scikit-learn, so even to implement the Ball-Tree or KD-Tree search for the k nearest neighbors
+- The softare still being in development, I would like to add a menu for choosing the metric, the number of neighbors (k), and whether the k-NN algorithm is wieghted or not
 
 ## Acknowledgements
 This software uses a single file C library for .jpg image decompression and resizing called stb_resize_image2 (.h) which was written by Jeff Roberts and Jorge L Rodriguez. I want to thank them for putting this library in the public domain and thus letting people use it. The library can be found here on Sean Barrett's GitHub:
