@@ -9,7 +9,8 @@ The software is using a free dataset of images of flowers that can be found on K
 As you will notice, the accuracy obtained with this algorithm for image classification is quite low (around 32%, which is a bit better than random guessing for this dataset: 20%). This is not surprising because we know that for high dimensional datasets like this one made of images, the k-NN algorithm fails to achieve decent accuracy compared to other methods such as neural networks.
 However, the implementation of the program can be modified easily to process datasets with lower dimensionality.
 There is a famous dataset called the Iris dataset which can be found on the scikit-learn website. With this dataset, this same algorithm achieves 90% accuracy.
-Link to the scikit-learn documentation and the Iris dataset : https://scikit-learn.org/stable/auto_examples/datasets/plot_iris_dataset.html
+Link to the scikit-learn documentation and the Iris dataset: 
+https://scikit-learn.org/stable/auto_examples/datasets/plot_iris_dataset.html
 
 The goal here was to understand a bit better how the k-NN algorithm works. In fact, before programming it, I had studied it in class and had used it with Python via scikit-learn, but I was kind of frustrated to see that everything was already done for me and could be written with 10 lines of code. I wanted to understand really the algorithm, and what could be better than programming it ?
 
@@ -57,10 +58,13 @@ make
 - You can use a different dataset, but you will have to modify some code
 
 # What will be next ?
-- In the future, my goal would be to increase what can be done with this software, for example by increasing the number of available metric (like adding cosine similarity)
-- The idea would be to implement what is available in KNeighborsClassifier object in scikit-learn, so even implementing Ball-Tree of KD-Tree search for the k nearest neighbors
+- In the future, my goal would be to increase what can be done with this software, for example by increasing the number of available metricc (like adding cosine similarity)
+- The idea would be to implement what is available in the KNeighborsClassifier object in scikit-learn, so even to implement the Ball-Tree of KD-Tree search for the k nearest neighbors
 
 # Acknowledgements
-This software uses a single file C library for .jpg image decompression and resizing called stb_resize_image2 (.h) which was written by Jeff Roberts and Jorge L Rodriguez. I want to thank them for putting this library in the public domain and thus letting people use it. The library can be found here on Sean Barrett's GitHub: https://github.com/nothings/stb/blob/master/stb_image_resize2.h.
+This software uses a single file C library for .jpg image decompression and resizing called stb_resize_image2 (.h) which was written by Jeff Roberts and Jorge L Rodriguez. I want to thank them for putting this library in the public domain and thus letting people use it. The library can be found here on Sean Barrett's GitHub:
+
+https://github.com/nothings/stb/blob/master/stb_image_resize2.h
+
 Finally, I also want to thank Sparh Gupta, a Kaggler, for providing the flower dataset used here.
 
