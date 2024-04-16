@@ -3,8 +3,8 @@
 ## Igor Robin - Student at ISIMA in Clermont-Ferrand, France
 
 ## Image classification
-The purpose of this software is to classify images using the k-Nearest Neighbors (k-NN) algorithm in the C language.
-The software is using a free dataset of flower images that can be found on Kaggle. 
+The purpose of this program is to classify images using the k-Nearest Neighbors (k-NN) algorithm in the C language.
+The program is using a free dataset of flower images that can be found on Kaggle. 
 
 As you will notice, the accuracy obtained with this algorithm for image classification is quite low (around 32%, which is a bit better than random guessing for this dataset: 20%). This is not surprising because we know that for high dimensional datasets like the ones made of images, the k-NN algorithm fails to achieve decent accuracy compared to other methods such as neural networks.
 However, the implementation of the program can be modified easily to process datasets with lower dimensionality.
@@ -58,12 +58,12 @@ make
 - You can use a different dataset, but you will have to modify some code because the file structure will be different
 
 ## What will be next ?
-- In the future, my goal would be to have more features available is this software, for example by increasing the number of available metrics (like adding cosine similarity)
+- In the future, my goal would be to have more features available is this program, for example by increasing the number of available metrics (like adding cosine similarity)
 - The idea would be to implement what is available in the KNeighborsClassifier object in scikit-learn, so even to implement the Ball-Tree or KD-Tree search for the k nearest neighbors
 - The softare still being in development, I would like to add a menu for choosing the metric, the number of neighbors (k), and whether the k-NN algorithm is wieghted or not
 
 ## Acknowledgements
-This software uses a single file C library for .jpg image decompression and resizing called stb_resize_image2 (.h) which was written by Jeff Roberts and Jorge L Rodriguez. I want to thank them for putting this library in the public domain and thus letting people use it. The library can be found here on Sean Barrett's GitHub:
+This program uses a single file C library for .jpg image decompression and resizing called stb_resize_image2 (.h) which was written by Jeff Roberts and Jorge L Rodriguez. I want to thank them for putting this library in the public domain and thus letting people use it. The library can be found here on Sean Barrett's GitHub:
 
 https://github.com/nothings/stb/blob/master/stb_image_resize2.h
 
@@ -72,6 +72,6 @@ Finally, I also want to thank Sparsh Gupta, a Kaggler, for providing the flower 
 Any demand, remark, or desire of contribution regarding this project would be welcomed ! You can send me an email at Igor.ROBIN@etu.isima.fr
 
 ## Work in progress
-This software is still in development
+This program is still in development
 
 
