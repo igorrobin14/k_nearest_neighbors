@@ -4,10 +4,8 @@
  * @brief Definition of functions for image processing and path management
  * @version 0.1
  * @date 2024-04-14
- * 
- * @copyright 
- * 
  */
+
 #include "image.h"
 
 #define STB_IMAGE_RESIZE_IMPLEMENTATION

@@ -4,9 +4,6 @@
  * @brief Metrics that can be used to compute distances between samples
  * @version 0.1
  * @date 2024-04-14
- * 
- * @copyright 
- * 
  */
 
 #ifndef METRCIS_H

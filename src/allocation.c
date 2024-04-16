@@ -4,10 +4,8 @@
  * @brief Functions definitions for memory allocations for k-NN classification
  * @version 0.1
  * @date 2024-04-14
- * 
- * @copyright
- * 
  */
+
 #include "allocation.h"
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 

@@ -4,10 +4,8 @@
  * @brief Type definitions for the k-NN classification
  * @version 0.1
  * @date 2024-04-14
- * 
- * @copyright 
- * 
  */
+
 #ifndef TYPES_H
 #define TYPES_H
 

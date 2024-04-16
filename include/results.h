@@ -4,10 +4,8 @@
  * @brief 
  * @version 0.1
  * @date 2024-04-14
- * 
- * @copyright 
- * 
  */
+
 #ifndef RESULTS_H
 #define RESULTS_H
 
@@ -20,7 +18,7 @@
  * @param samples_test The array of test images (samples)
  * @param class_labels The class labels
  * @param nb_samples_test The number of test samples
- * @param true_positives The number of true positives
+ * @param true_positives TO DO
  */
 void compute_true_positives(char ***predictions, raw_image_t **samples_test, char *class_labels[], int nb_samples_test, double **true_positives);
 
@@ -31,7 +29,7 @@ void compute_true_positives(char ***predictions, raw_image_t **samples_test, cha
  * @param samples_test The array of test images (samples)
  * @param class_labels The class labels
  * @param nb_samples_test The number of test samples
- * @param true_positives The number of false positives
+ * @param true_positives TO DO
  */
 void compute_false_positives(char ***predictions, raw_image_t **samples_test, char *class_labels[], int nb_test_samples, double **false_positives);
 
@@ -50,9 +48,9 @@ void compute_false_negatives(char ***predictions, raw_image_t **samples_test, ch
  * @brief Computes all the results for the k-NN classification
  * 
  * @param r The results structure
- * @param true_positives The n
- * @param false_positives 
- * @param false_negatives 
+ * @param true_positives TO DO
+ * @param false_positives TO DO
+ * @param false_negatives TO DO
  * @param class_labels The class labels
  * @param samples_test The array of test images (samples)
  * @param nb_test_samples The number of test images

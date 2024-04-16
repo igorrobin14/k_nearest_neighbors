@@ -2,12 +2,9 @@
  * @file main.c
  * @author Igor Robin (Igor.ROBIN@etu.isima.fr)
  * @brief The k-Nearest-Neighbors classification and algorithm applied to a dataset of images of flowers
- * Every header is commented with the meaning of function parameters, returns and the purpose of the functions
+ * Every header is commented with the purpose of the functions, the meaning of the function parameters and returns
  * @version 0.1
  * @date 2024-04-14
- * 
- * @copyright
- * 
  */
 
 #include "knn.h"
@@ -22,6 +19,7 @@ int main(void)
 {
     int k = 10;
     bool weighted_knn = false;
+
     metric m = euclidean_distance;
     double p = 2;
 

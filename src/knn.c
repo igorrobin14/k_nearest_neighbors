@@ -4,9 +4,6 @@
  * @brief Definition of functions at the heart of the k-NN algorithm
  * @version 0.1
  * @date 2024-04-14
- * 
- * @copyright 
- * 
  */
 
 #include "knn.h"

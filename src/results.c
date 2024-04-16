@@ -4,10 +4,8 @@
  * @brief Definition of functions managing results
  * @version 0.1
  * @date 2024-04-14
- * 
- * @copyright 
- * 
  */
+
 #include "results.h"
 
 double compute_accuracy(int nb_trues, int nb_test_samples)

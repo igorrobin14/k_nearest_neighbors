@@ -4,10 +4,8 @@
  * @brief Functions for image processing and path storage
  * @version 0.1
  * @date 2024-04-14
- * 
- * @copyright
- * 
  */
+
 #ifndef IMAGE_H
 #define IMAGE_H
 
@@ -56,10 +54,5 @@ void resize_all_images(raw_image_t **image_array, int nb_samples, int **files_pe
  * @param train_images TO MODIFY
  */
 void map_image_to_class(char **class_labels, int *files_per_subfolder, raw_image_t **train_images);
-//void free_loop_data(point_info_t **points_infos, point_info_t **k_nearest_neighbors, char ***votes, double **counts, char **ans, int k);
-//raw_image_t load_jpeg_image_file(char *image_path);
-//void save_jpeg_image_file(raw_image_t *image, char *file_path);
-//void map_image_to_class(char *class_labels[], int *files_per_subfolder, raw_image_t **train_images);
-//void fill_test_file_paths(char **test_file_paths, char *test_folder_path);
 
 #endif

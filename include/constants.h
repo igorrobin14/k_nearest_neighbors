@@ -4,10 +4,8 @@
  * @brief Main constants for k-NN classification and image processing
  * @version 0.1
  * @date 2024-04-14
- * 
- * @copyright 
- * 
  */
+
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 

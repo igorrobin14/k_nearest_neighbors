@@ -4,10 +4,8 @@
  * @brief Header for memory allocation and image loading functions
  * @version 0.1
  * @date 2024-04-14
- * 
- * @copyright
- * 
  */
+
 #ifndef ALLOCATION_H
 #define ALLOCATION_H
 
@@ -100,6 +98,6 @@ void allocate_results(result_t *r, double **true_positives, double **false_posit
  * @param k The number of neighbors for the k-NN algorithm
  */
 void free_loop_data(point_info_t **points_infos, point_info_t **k_nearest_neighbors, char ***votes, double **counts, char **ans, int k);
-void allocate_test_images(raw_image_t **test_images, int nb_test_samples);
+//void allocate_test_images(raw_image_t **test_images, int nb_test_samples);
 
 #endif
