@@ -62,6 +62,7 @@ typedef struct result
     double *supports;
     double precision_mavg, precision_wavg;
     double recall_mavg, recall_wavg;
+    double f1_score_mavg, f1_score_wavg;
     double accuracy;
 }
 result_t;

@@ -52,13 +52,11 @@ void compute_false_negatives(char ***predictions, raw_image_t **samples_test, ch
                 (*false_negatives)[i] += 1.0;
             }
         }
-        printf("false_negatives[%d]: %lf\n", i, (*false_negatives)[i]);
     }
 }
 
 void compute_supports(result_t *r, char *class_labels[], raw_image_t **samples_test, int nb_test_samples)
 {
-    printf("nb_test_samples: %d\n", nb_test_samples);
     for (int i = 0; i < NB_CLASSES; i++)
     {
         for (int j = 0; j < nb_test_samples; j++)
@@ -82,23 +80,27 @@ void compute_results(result_t *r, double **true_positives, double **false_positi
     for (int i = 0; i < NB_CLASSES; i++)
     {
         (r->precisions)[i] = (*true_positives)[i] / ((*true_positives)[i] + (*false_positives)[i]);
-        printf("%lf %lf\n", (*true_positives)[i], (*false_positives)[i]);
         (r->recalls)[i] = (*true_positives)[i] / ((*true_positives)[i] + (*false_negatives)[i]);
         (r->f1_scores)[i] = 2 * (r->precisions)[i] * (r->recalls)[i] / ((r->precisions)[i] + (r->recalls)[i]);
         r->precision_mavg += (r->precisions)[i];
         r->recall_mavg += (r->recalls)[i];
         r->precision_wavg += ((r->precisions)[i] * (r->supports)[i]);
         r->recall_wavg += ((r->recalls)[i] * (r->supports)[i]);
+        r->f1_score_mavg += (r->f1_scores[i]);
+        r->f1_score_wavg += ((r->f1_scores)[i] * (r->supports)[i]);
     }
 
     r->recall_mavg /= NB_CLASSES;
+    r->recall_wavg /= nb_test_samples;
     r->precision_mavg /= NB_CLASSES;
     r->precision_wavg /= nb_test_samples;
-    r->recall_wavg /= nb_test_samples;
+    r->f1_score_mavg /= NB_CLASSES;
+    r->f1_score_wavg /= nb_test_samples;
 }
 
 void display_results(result_t *r, char *class_labels[])
 {
+    printf("\n");
     printf("\033[1mClass label     Precision       Recall          F1-Score        Support\033[0m\n");
 
     for (int i = 0; i < NB_CLASSES; i++)
@@ -107,8 +109,8 @@ void display_results(result_t *r, char *class_labels[])
     }
 
     printf("\n");
-    printf("Macro average:\n                %lf        %lf\n", r->precision_mavg, r->recall_mavg);
-    printf("Weighted average:\n                %lf        %lf\n", r->precision_wavg, r->recall_wavg);
+    printf("Macro average:\n                %lf        %lf        %lf\n", r->precision_mavg, r->recall_mavg, r->f1_score_mavg);
+    printf("Weighted average:\n                %lf        %lf        %lf\n", r->precision_wavg, r->recall_wavg, r->f1_score_wavg);
     printf("\n");
     printf("\033[1mAccuracy: %lf\033[0m\n", r->accuracy);
 }

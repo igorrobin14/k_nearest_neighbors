@@ -72,7 +72,6 @@ void predictions_vs_expected(int nb_test_samples, char ***predictions, raw_image
     {
         strcmp((*predictions)[i], (*samples_test)[i].class) == 0 ? ((*results)[i] = true) : ((*results)[i] = false);
         (*results)[i] == true ? ((*nb_trues)++) : ((*nb_falses)++);
-        printf("predictions[%d] : %s, samples_test[%d].class : %s\n", i, (*predictions)[i], i, (*samples_test)[i].class);
     }
 }
 
