@@ -1,14 +1,7 @@
-/**
- * @file types.h
- * @author Igor Robin (Igor.ROBIN@etu.isima.fr)
- * @brief Type definitions for the k-NN classification
- * @version 0.1
- * @date 2024-04-14
- */
+#ifndef TYPES_CONSTANTS_H
+#define TYPES_CONSTANTS_H
 
-#ifndef TYPES_H
-#define TYPES_H
-
+#include <stdbool.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
@@ -20,10 +13,38 @@
 #include <jpeglib.h>
 #include <jerror.h>
 
-#include "constants.h"
-
 #define _USE_MISC
 #include <dirent.h>
+
+/**
+ * @brief The total number of classes
+ */
+#define NB_CLASSES 5
+
+/**
+ * @brief The maximum length of a string containing an image path
+ */
+#define MAX_PATH_LENGTH 256
+
+/**
+ * @brief The maximum length of a string containing other information such as class labels
+ */
+#define MAX_STR_LENGTH 128
+
+/**
+ * @brief The size of the resized images
+ */
+#define RESIZED_IMG_SIZE 128
+
+/**
+ * @brief The number of channels for images (RGB)
+ */
+#define NB_CHANNELS 3
+
+/**
+ * @brief The quality of .jpg image decompression
+ */
+#define IMG_QUALITY 100
 
 /**
  * @brief An image structure

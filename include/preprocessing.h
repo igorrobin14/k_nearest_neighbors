@@ -1,15 +1,7 @@
-/**
- * @file image.h
- * @author Igor Robin (Igor.ROBIN@etu.isima.fr)
- * @brief Functions for image processing and path storage
- * @version 0.1
- * @date 2024-04-14
- */
+#ifndef PREPROCESSING_H
+#define PREPROCESSING_H
 
-#ifndef IMAGE_H
-#define IMAGE_H
-
-#include "types.h"
+#include "types_constants.h"
 
 /**
  * @brief Counts the number of files per subfolder (number of samples per class) and computes the total number of samples (sum)
@@ -55,5 +47,8 @@ void resize_all_images(raw_image_t **image_array, int nb_samples, int **files_in
  * @param train_images TO MODIFY
  */
 void bind_image_to_class(char **class_labels, int *files_in_subfolders, raw_image_t **train_images);
+void random_shuffle(raw_image_t *samples, int nb_samples, unsigned int seed);
+
+void train_test_split(double test_size, int nb_samples, raw_image_t **train_image_array, raw_image_t **test_image_array, raw_image_t **resized_image_array, int *nb_test_samples, int *nb_train_samples);
 
 #endif

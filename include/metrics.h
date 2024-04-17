@@ -9,7 +9,7 @@
 #ifndef METRCIS_H
 #define METRICS_H
 
-#include "types.h"
+#include "types_constants.h"
 
 /**
  * @brief Euclidean distance between two samples (order 2 Minkowski distance)

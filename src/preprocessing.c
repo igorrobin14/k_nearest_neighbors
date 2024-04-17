@@ -1,12 +1,4 @@
-/**
- * @file image.c
- * @author Igor Robin (Igor.ROBIN@etu.isima.fr)
- * @brief Definition of functions for image processing and path management
- * @version 0.1
- * @date 2024-04-14
- */
-
-#include "image.h"
+#include "preprocessing.h"
 
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 #include "stb_image_resize2.h"
@@ -163,5 +155,48 @@ void save_jpeg_image_file(raw_image_t *image, char *file_path)
     else
     {
         printf("Error opening file %s for writing\n", file_path);
+    }
+}
+
+void random_shuffle(raw_image_t *samples, int nb_samples, unsigned int seed)
+{
+    srand(seed);
+    int j;
+    raw_image_t temp_sample;
+    
+    for (int i = nb_samples - 1; i > 0; i--)
+    {
+        j = rand() % (i + 1);
+        
+        memcpy(&temp_sample, &samples[i], sizeof(raw_image_t));
+        memcpy(&samples[i], &samples[j], sizeof(raw_image_t));
+        memcpy(&samples[j], &temp_sample, sizeof(raw_image_t));
+    }
+}
+
+void train_test_split(double test_size, int nb_samples, raw_image_t **train_image_array, raw_image_t **test_image_array, raw_image_t **resized_image_array, int *nb_test_samples, int *nb_train_samples)
+{
+    *nb_test_samples = (int) ((double) nb_samples * test_size);
+    *nb_train_samples = nb_samples - *nb_test_samples;
+
+    *train_image_array = (raw_image_t *) calloc(*nb_train_samples, sizeof(raw_image_t));
+    *test_image_array = (raw_image_t *) calloc(*nb_test_samples, sizeof(raw_image_t));
+
+    int index = 0;
+
+    for (int j = 0; j < *nb_train_samples; j++)
+    {
+        (*train_image_array)[index] = (*resized_image_array)[index];
+        index++;
+    }
+    
+    int second_index = 0;
+
+    for (int j = 0; j < *nb_test_samples; j++)
+    {
+        (*test_image_array)[second_index] = (*resized_image_array)[index];
+        
+        index++;
+        second_index++;
     }
 }

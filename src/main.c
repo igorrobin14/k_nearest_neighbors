@@ -1,18 +1,17 @@
 /**
  * @file main.c
  * @author Igor Robin (Igor.ROBIN@etu.isima.fr)
- * @brief The k-Nearest-Neighbors classification and algorithm applied to a dataset of images of flowers
- * Every header is commented with the purpose of the functions, the meaning of the function parameters and returns
+ * @brief The k-Nearest-Neighbors algorithm applied to classification on a dataset of flower images
+ * Every header is commented with the purpose of the functions and the meaning of the parameters
  * @version 0.1
  * @date 2024-04-14
  */
 
-#include "knn.h"
+#include "algorithm.h"
 #include "allocation.h"
 #include "metrics.h"
-#include "image.h"
-#include "constants.h"
-#include "types.h"
+#include "preprocessing.h"
+#include "types_constants.h"
 #include "results.h"
 
 int main(void)
@@ -84,7 +83,6 @@ int main(void)
 
     for (int i = 0; i < nb_test_samples; i++)
     {
-        // here
         allocate_points_data(&nearest_points_data, nb_train_samples);
         compute_points_data(&nearest_points_data, nb_train_samples, &train_image_array, &test_image_array, i, weighted_knn, m, p);
 
@@ -97,7 +95,6 @@ int main(void)
         allocate_ans(&ans);
         fill_votes(&votes, &train_image_array, &k_nearest_neighbors, k);
         compute_weighted_counts(&votes, k, class_labels, &counts, &k_nearest_neighbors);
-        //allocate_votes_counts_ans(&votes, &counts, &ans, k, NB_CLASSES, class_labels, &train_image_array, &k_nearest_neighbors);
 
         find_prediction(&max_votes, &max_votes_index, NB_CLASSES, &counts, &ans, class_labels, &predictions, i);
 
@@ -105,14 +102,12 @@ int main(void)
         printf("Percentage done : %lf \n", (double) i / (double) nb_test_samples * 100);
     }
 
-    predictions_vs_expected(nb_test_samples, &predictions, &test_image_array, &is_right_class, &nb_trues, &nb_falses);
     allocate_results(&r, &true_positives, &false_positives, &false_negatives, nb_test_samples);
+    compute_accuracy(&r, nb_test_samples, &predictions, &test_image_array, &is_right_class, &nb_trues, &nb_falses);
     compute_true_positives(&predictions, &test_image_array, class_labels, nb_test_samples, &true_positives);
     compute_false_positives(&predictions, &test_image_array, class_labels, nb_test_samples, &false_positives);
     compute_false_negatives(&predictions, &test_image_array, class_labels, nb_test_samples, &false_negatives);
     compute_results(&r, &true_positives, &false_positives, &false_negatives, class_labels, &test_image_array, nb_test_samples);
-    r.accuracy = compute_accuracy(nb_trues, nb_test_samples);
-    
     display_results(&r, class_labels);
 
     return 0;

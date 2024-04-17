@@ -8,10 +8,10 @@
  * @copyright 
  * 
  */
-#ifndef KNN_H
-#define KNN_H
+#ifndef ALGORTIHM_H
+#define ALGORITHM_H
 
-#include "types.h"
+#include "types_constants.h"
 
 /**
  * @brief Shuffles the array of given images randomly
@@ -20,7 +20,7 @@
  * @param nb_samples The number of images in the array
  * @param seed The random shuffling seed
  */
-void random_shuffle(raw_image_t *samples, int nb_samples, unsigned int seed);
+//void random_shuffle(raw_image_t *samples, int nb_samples, unsigned int seed);
 
 /**
  * @brief Splits the array of all images into a test and a train set

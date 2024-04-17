@@ -9,7 +9,7 @@
 #ifndef ALLOCATION_H
 #define ALLOCATION_H
 
-#include "types.h"
+#include "types_constants.h"
 
 /**
  * @brief Opens, loads, and returns a .jpg image by decompressing it using the STB library

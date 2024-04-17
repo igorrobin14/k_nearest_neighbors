@@ -8,9 +8,14 @@
 
 #include "results.h"
 
-double compute_accuracy(int nb_trues, int nb_test_samples)
+double compute_accuracy(result_t *r, int nb_test_samples, char ***predictions, raw_image_t **samples_test, bool **is_right_class, int *nb_trues, int *nb_falses)
 {
-    return ((double) (nb_trues) / (double) nb_test_samples);
+    for (int i = 0; i < nb_test_samples; i++)
+    {
+        strcmp((*predictions)[i], (*samples_test)[i].class) == 0 ? ((*is_right_class)[i] = true) : ((*is_right_class)[i] = false);
+        (*is_right_class)[i] == true ? ((*nb_trues)++) : ((*nb_falses)++);
+    }
+    r->accuracy = (double) (*nb_trues) / (double) nb_test_samples;
 }
 
 void compute_true_positives(char ***predictions, raw_image_t **samples_test, char *class_labels[], int nb_test_samples, double **true_positives)

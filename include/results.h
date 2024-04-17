@@ -9,7 +9,7 @@
 #ifndef RESULTS_H
 #define RESULTS_H
 
-#include "types.h"
+#include "types_constants.h"
 
 /**
  * @brief Computes the true positives in the preditions
@@ -74,7 +74,7 @@ void compute_supports(result_t *r, char *class_labels[], raw_image_t **samples_t
  * @param nb_test_samples The number of test samples
  * @return double 
  */
-double compute_accuracy(int nb_trues, int nb_test_samples);
+double compute_accuracy(result_t *r, int nb_test_samples, char ***predictions, raw_image_t **samples_test, bool **is_right_class, int *nb_trues, int *nb_falses);
 
 /**
  * @brief Displays all the results in a clear way
