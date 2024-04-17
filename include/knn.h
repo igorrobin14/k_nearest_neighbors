@@ -47,7 +47,7 @@ void train_test_split(double test_size, int nb_samples, raw_image_t **train_imag
  * @param m The metric used for computing distances
  * @param p The order of the Minkowski metric
  */
-void compute_points_infos(point_info_t **points_infos, int nb_train_samples, raw_image_t **samples_train, raw_image_t **samples_test, int i, bool weighted_knn, metric m, double p);
+void compute_points_data(point_data_t **points_infos, int nb_train_samples, raw_image_t **samples_train, raw_image_t **samples_test, int i, bool weighted_knn, metric m, double p);
 
 /**
  * @brief Compares two samples based on their distance
@@ -65,7 +65,7 @@ int compare_samples(const void *a, const void *b);
  * @param k The number of neigbors considered in the k-NN algorithm
  * @param points_infos All the points considered for the currently processed sample
  */
-void isolate_knns(point_info_t **k_nearest_neighbors, int k, point_info_t **points_infos);
+void isolate_knns(point_data_t **k_nearest_neighbors, int k, point_data_t **points_infos);
 
 /**
  * @brief Finds the predicted class for a sample
@@ -81,6 +81,9 @@ void isolate_knns(point_info_t **k_nearest_neighbors, int k, point_info_t **poin
  */
 void find_prediction(int *max_votes, int *max_votes_index, int number_of_classes, double **counts, char **ans, char *class_labels[], char ***predictions, int i);
 void predictions_vs_expected(int nb_test_samples, char ***predictions, raw_image_t **samples_test, bool **results, int *nb_trues, int *nb_falses);
+
+void fill_votes(char ***votes, raw_image_t **samples_train, point_data_t **k_nearest_neighbors, int k);
+void compute_weighted_counts(char ***votes, int k, char *class_labels[], double **counts, point_data_t **k_nearest_neighbors);
 
 
 #endif

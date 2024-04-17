@@ -33,18 +33,18 @@ int count_files_in_folder(const char *folder_path)
     return file_count;
 }
 
-void count_files_per_subfolder_and_nb_samples(int **files_per_subfolder, char *flower_folder_paths[], int *nb_samples)
+void count_files_in_subfolders_and_nb_samples(int **files_in_subfolders, char *flower_folder_paths[], int *nb_samples)
 {
-    *files_per_subfolder = (int *) calloc(NB_CLASSES, sizeof(int));
+    *files_in_subfolders = (int *) calloc(NB_CLASSES, sizeof(int));
 
     for (int i = 0; i < NB_CLASSES; i++)
     {
-        (*files_per_subfolder)[i] = count_files_in_folder(flower_folder_paths[i]);
-        *nb_samples += (*files_per_subfolder)[i];
+        (*files_in_subfolders)[i] = count_files_in_folder(flower_folder_paths[i]);
+        *nb_samples += (*files_in_subfolders)[i];
     }
 }
 
-void fill_file_paths(char ****folder_array, char *flower_folder_paths[])
+void fill_all_image_paths(char ****folder_array, char *flower_folder_paths[])
 {
     DIR *dir;
     struct dirent *ent;
@@ -96,14 +96,14 @@ void fill_test_file_paths(char **test_file_paths, char *test_folder_path)
     }
 }
 
-void resize_all_images(raw_image_t **image_array, int nb_samples, int **files_per_subfolder, raw_image_t **resized_image_array)
+void resize_all_images(raw_image_t **image_array, int nb_samples, int **files_in_subfolders, raw_image_t **resized_image_array)
 {
     *resized_image_array = (raw_image_t *) calloc(nb_samples, sizeof(raw_image_t));
     raw_image_t resized_image = {NB_CHANNELS, RESIZED_IMG_SIZE, RESIZED_IMG_SIZE, NULL, NULL};
     int index = 0;
     for (int i = 0; i < NB_CLASSES; i++)
     {
-        for (int j = 0; j < (*files_per_subfolder)[i]; j++)
+        for (int j = 0; j < (*files_in_subfolders)[i]; j++)
         {
             resized_image.image_data = (unsigned char *) calloc(RESIZED_IMG_SIZE * RESIZED_IMG_SIZE * NB_CHANNELS, sizeof(unsigned char));
             stbir_resize_uint8_linear((*image_array)[index].image_data, (*image_array)[index].width, (*image_array)[index].height, 0, resized_image.image_data, resized_image.width, resized_image.height, 0, STBIR_RGB);
@@ -113,12 +113,12 @@ void resize_all_images(raw_image_t **image_array, int nb_samples, int **files_pe
     }
 }
 
-void map_image_to_class(char *class_labels[], int *files_per_subfolder, raw_image_t **train_images)
+void bind_image_to_class(char *class_labels[], int *files_in_subfolders, raw_image_t **train_images)
 {
     int index = 0;
     for (int i = 0; i < NB_CLASSES; i++)
     {
-        for (int j = 0; j < files_per_subfolder[i]; j++)
+        for (int j = 0; j < files_in_subfolders[i]; j++)
         {
             (*train_images)[index].class = (char *) calloc(MAX_STR_LENGTH, sizeof(char));
             strcpy((*train_images)[index].class, class_labels[i]);

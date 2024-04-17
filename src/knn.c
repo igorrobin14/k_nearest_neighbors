@@ -25,7 +25,7 @@ void random_shuffle(raw_image_t *samples, int nb_samples, unsigned int seed)
     }
 }
 
-void compute_points_infos(point_info_t **points_infos, int nb_train_samples, raw_image_t **samples_train, raw_image_t **samples_test, int i, bool weighted_knn, metric m, double p)
+void compute_points_data(point_data_t **points_infos, int nb_train_samples, raw_image_t **samples_train, raw_image_t **samples_test, int i, bool weighted_knn, metric m, double p)
 {
     for (int j = 0; j < nb_train_samples; j++)
     {
@@ -38,8 +38,8 @@ void compute_points_infos(point_info_t **points_infos, int nb_train_samples, raw
 int compare_samples(const void *a, const void *b)
 {
     int result;
-    const point_info_t *p_a = (const point_info_t *)a;
-    const point_info_t *p_b = (const point_info_t *)b;
+    const point_data_t *p_a = (const point_data_t *)a;
+    const point_data_t *p_b = (const point_data_t *)b;
 
     if (p_a->distance < p_b->distance)
     {
@@ -57,7 +57,7 @@ int compare_samples(const void *a, const void *b)
     return result;
 }
 
-void isolate_knns(point_info_t **k_nearest_neighbors, int k, point_info_t **points_infos)
+void isolate_knns(point_data_t **k_nearest_neighbors, int k, point_data_t **points_infos)
 {
     for (int l = 0; l < k; l++)
     {

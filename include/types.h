@@ -43,13 +43,13 @@ raw_image_t;
 /**
  * @brief For each train sample, its distance, weight and index with respect to the currently processed test image
  */
-typedef struct point_info
+typedef struct point_data
 {
     double distance;
     double weight;
     int index;
 }
-point_info_t;
+point_data_t;
 
 /**
  * @brief The results structure
@@ -68,7 +68,7 @@ typedef struct result
 result_t;
 
 /**
- * @brief A metric typedef
+ * @brief A typedef for metrics
  */
 typedef double (*metric) (raw_image_t *, raw_image_t *, double);
 

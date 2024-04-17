@@ -64,9 +64,9 @@ raw_image_t load_jpeg_image_file(char *image_path)
     return new_image;
 }
 
-void allocate_points_infos(point_info_t **points_infos, int nb_train_samples)
+void allocate_points_data(point_data_t **points_infos, int nb_train_samples)
 {
-    *points_infos = (point_info_t *) calloc(nb_train_samples, sizeof(point_info_t));
+    *points_infos = (point_data_t *) calloc(nb_train_samples, sizeof(point_data_t));
 }
 
 void allocate_test_images(raw_image_t **test_images, int nb_test_samples)
@@ -79,43 +79,59 @@ void allocate_test_images(raw_image_t **test_images, int nb_test_samples)
     
 }
 
-void allocate_knns(point_info_t **k_nearest_neighbors, int k)
+void allocate_knns(point_data_t **k_nearest_neighbors, int k)
 {
-    *k_nearest_neighbors = (point_info_t *) calloc(k, sizeof(point_info_t));
+    *k_nearest_neighbors = (point_data_t *) calloc(k, sizeof(point_data_t));
 }
 
-void allocate_file_paths(int **files_per_subfolder, char ****file_paths)
+void allocate_file_paths(int **files_in_subfolders, char ****all_image_paths)
 {
-    *file_paths = (char ***) calloc(NB_CLASSES, sizeof(char **));
+    *all_image_paths = (char ***) calloc(NB_CLASSES, sizeof(char **));
 
     for (int i = 0; i < NB_CLASSES; i++)
     {
-        (*file_paths)[i] = (char **) calloc((*files_per_subfolder)[i], sizeof(char *));
-        for (int j = 0; j < (*files_per_subfolder)[i]; j++)
+        (*all_image_paths)[i] = (char **) calloc((*files_in_subfolders)[i], sizeof(char *));
+        for (int j = 0; j < (*files_in_subfolders)[i]; j++)
         {
-            (*file_paths)[i][j] = (char *) calloc(MAX_PATH_LENGTH, sizeof(char));
+            (*all_image_paths)[i][j] = (char *) calloc(MAX_PATH_LENGTH, sizeof(char));
         }
         
     }
 }
 
-void allocate_votes_counts_ans(char ***votes, double **counts, char **ans, int k, int number_of_classes, char *class_labels[], raw_image_t **samples_train, point_info_t **k_nearest_neighbors)
+void allocate_votes(char ***votes, int k)
 {
     *votes = (char **) calloc(k, sizeof(char *));
     for (int l = 0; l < k; l++)
     {
         (*votes)[l] = calloc(MAX_STR_LENGTH, sizeof(char));
     }
+}
 
+void allocate_counts(double **counts)
+{
+    *counts = (double *) calloc(NB_CLASSES, sizeof(double));
+}
+
+void allocate_ans(char **ans)
+{
+    *ans = (char *) calloc(MAX_STR_LENGTH, sizeof(char));
+}
+
+void fill_votes(char ***votes, raw_image_t **samples_train, point_data_t **k_nearest_neighbors, int k)
+{
     for (int l = 0; l < k; l++)
     {
         strcpy((*votes)[l], (*samples_train)[(*k_nearest_neighbors)[l].index].class);
     }
 
-    *counts = (double *) calloc(NB_CLASSES, sizeof(double));
-    *ans = (char *) calloc(MAX_STR_LENGTH, sizeof(char));
+    //*counts = (double *) calloc(NB_CLASSES, sizeof(double));
+    //*ans = (char *) calloc(MAX_STR_LENGTH, sizeof(char));
+}
 
-    for (int l = 0; l < number_of_classes; l++)
+void compute_weighted_counts(char ***votes, int k, char *class_labels[], double **counts, point_data_t **k_nearest_neighbors)
+{
+    for (int l = 0; l < NB_CLASSES; l++)
     {
         for (int m = 0; m < k; m++)
         {
@@ -127,21 +143,21 @@ void allocate_votes_counts_ans(char ***votes, double **counts, char **ans, int k
     } 
 }
 
-void allocate_all_images(raw_image_t **image_array, int nb_samples, int **files_per_subfolder, char ****file_paths)
+void allocate_all_images(raw_image_t **image_array, int nb_samples, int **files_in_subfolders, char ****all_image_paths)
 {
     int index = 0;
     *image_array = (raw_image_t *) calloc(nb_samples, sizeof(raw_image_t));
     for (int i = 0; i < NB_CLASSES; i++)
     {
-        for (int j = 0; j < (*files_per_subfolder)[i]; j++)
+        for (int j = 0; j < (*files_in_subfolders)[i]; j++)
         {
-            (*image_array)[index] = load_jpeg_image_file((*file_paths)[i][j]);
+            (*image_array)[index] = load_jpeg_image_file((*all_image_paths)[i][j]);
             index++;
         }
     }
 }
 
-void allocate_preditions_and_results(char ***predictions, bool **results, int nb_test_samples)
+void allocate_predicted_classes(char ***predictions, int nb_test_samples)
 {
     *predictions = (char **) calloc(nb_test_samples, sizeof(char *));
  
@@ -150,10 +166,15 @@ void allocate_preditions_and_results(char ***predictions, bool **results, int nb
         (*predictions)[i] = (char *) calloc(MAX_STR_LENGTH, sizeof(char));
     }
 
-    *results = (bool *) calloc(nb_test_samples, sizeof(bool));
+    //*results = (bool *) calloc(nb_test_samples, sizeof(bool));
 }
 
-void free_loop_data(point_info_t **points_infos, point_info_t **k_nearest_neighbors, char ***votes, double **counts, char **ans, int k)
+void allocate_is_right_class(bool **is_right_class, int nb_test_samples)
+{
+    *is_right_class = (bool *) calloc(nb_test_samples, sizeof(bool));
+}
+
+void free_loop_data(point_data_t **points_infos, point_data_t **k_nearest_neighbors, char ***votes, double **counts, char **ans, int k)
 {
     free(*points_infos);
     free(*k_nearest_neighbors);
