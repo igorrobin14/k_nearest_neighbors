@@ -9,24 +9,6 @@
 #include "algorithm.h"
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 
-/*
-void random_shuffle(raw_image_t *samples, int nb_samples, unsigned int seed)
-{
-    srand(seed);
-    int j;
-    raw_image_t temp_sample;
-    
-    for (int i = nb_samples - 1; i > 0; i--)
-    {
-        j = rand() % (i + 1);
-        
-        memcpy(&temp_sample, &samples[i], sizeof(raw_image_t));
-        memcpy(&samples[i], &samples[j], sizeof(raw_image_t));
-        memcpy(&samples[j], &temp_sample, sizeof(raw_image_t));
-    }
-}
-*/
-
 void compute_points_data(point_data_t **points_infos, int nb_train_samples, raw_image_t **samples_train, raw_image_t **samples_test, int i, bool weighted_knn, metric m, double p)
 {
     for (int j = 0; j < nb_train_samples; j++)
@@ -68,45 +50,20 @@ void isolate_knns(point_data_t **k_nearest_neighbors, int k, point_data_t **poin
 
 }
 
-void predictions_vs_expected(int nb_test_samples, char ***predictions, raw_image_t **samples_test, bool **results, int *nb_trues, int *nb_falses)
+void compute_weighted_counts(char ***votes, int k, char *class_labels[], double **counts, point_data_t **k_nearest_neighbors)
 {
-    /*
-    for (int i = 0; i < nb_test_samples; i++)
+    for (int l = 0; l < NB_CLASSES; l++)
     {
-        strcmp((*predictions)[i], (*samples_test)[i].class) == 0 ? ((*results)[i] = true) : ((*results)[i] = false);
-        (*results)[i] == true ? ((*nb_trues)++) : ((*nb_falses)++);
-    }
-    */
+        for (int m = 0; m < k; m++)
+        {
+            if (strcmp((*votes)[m], class_labels[l]) == 0)
+            {
+                (*counts)[l] += (1.0 * (*k_nearest_neighbors)[m].weight);
+            }
+        }
+    } 
 }
 
-/*
-void train_test_split(double test_size, int nb_samples, raw_image_t **train_image_array, raw_image_t **test_image_array, raw_image_t **resized_image_array, int *nb_test_samples, int *nb_train_samples)
-{
-    *nb_test_samples = (int) ((double) nb_samples * test_size);
-    *nb_train_samples = nb_samples - *nb_test_samples;
-
-    *train_image_array = (raw_image_t *) calloc(*nb_train_samples, sizeof(raw_image_t));
-    *test_image_array = (raw_image_t *) calloc(*nb_test_samples, sizeof(raw_image_t));
-
-    int index = 0;
-
-    for (int j = 0; j < *nb_train_samples; j++)
-    {
-        (*train_image_array)[index] = (*resized_image_array)[index];
-        index++;
-    }
-    
-    int second_index = 0;
-
-    for (int j = 0; j < *nb_test_samples; j++)
-    {
-        (*test_image_array)[second_index] = (*resized_image_array)[index];
-        
-        index++;
-        second_index++;
-    }
-}
-*/
 
 void find_prediction(int *max_votes, int *max_votes_index, int number_of_classes, double **counts, char **ans, char *class_labels[], char ***predictions, int i)
 {

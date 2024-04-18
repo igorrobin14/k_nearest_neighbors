@@ -12,6 +12,15 @@
 #include "types_constants.h"
 
 /**
+ * @brief Computes the accuracy of the k-NN classification
+ * 
+ * @param nb_trues The number of correctly predicted samples
+ * @param nb_test_samples The number of test samples
+ * @return double 
+ */
+double compute_accuracy(result_t *r, int nb_test_samples, char ***predictions, raw_image_t **samples_test, bool **is_right_class, int *nb_trues, int *nb_falses);
+
+/**
  * @brief Computes the true positives in the preditions
  * 
  * @param predictions The array of predictions
@@ -67,14 +76,7 @@ void compute_results(result_t *r, double **true_positives, double **false_positi
  */
 void compute_supports(result_t *r, char *class_labels[], raw_image_t **samples_test, int nb_test_samples);
 
-/**
- * @brief Computes the accuracy of the k-NN classification
- * 
- * @param nb_trues The number of correctly predicted samples
- * @param nb_test_samples The number of test samples
- * @return double 
- */
-double compute_accuracy(result_t *r, int nb_test_samples, char ***predictions, raw_image_t **samples_test, bool **is_right_class, int *nb_trues, int *nb_falses);
+
 
 /**
  * @brief Displays all the results in a clear way

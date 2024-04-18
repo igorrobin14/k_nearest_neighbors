@@ -79,16 +79,9 @@ void allocate_knns(point_data_t **k_nearest_neighbors, int k);
  */
 //void allocate_votes_counts_ans(char ***votes, double **counts, char **ans, int k, int number_of_classes, char *class_labels[], raw_image_t **samples_train, point_data_t **k_nearest_neighbors);
 
-/**
- * @brief Allocates the memory for the results of the k-NN classification
- * 
- * @param r The structure containing the results
- * @param true_positives The number of true positives 
- * @param false_positives The number of false positives
- * @param false_negatives The number of false negatives
- * @param nb_test_samples The total number of test images (samples)
- */
-void allocate_results(result_t *r, double **true_positives, double **false_positives, double **false_negatives, int nb_test_samples);
+void allocate_votes(char ***votes, int k);
+void allocate_counts(double **counts);
+void allocate_ans(char **ans);
 
 /**
  * @brief Frees the memory allocated at every main loop iteration
@@ -101,8 +94,18 @@ void allocate_results(result_t *r, double **true_positives, double **false_posit
  * @param k The number of neighbors for the k-NN algorithm
  */
 void free_loop_data(point_data_t **points_infos, point_data_t **k_nearest_neighbors, char ***votes, double **counts, char **ans, int k);
-void allocate_counts(double **counts);
-void allocate_ans(char **ans);
-void allocate_votes(char ***votes, int k);
+
+/**
+ * @brief Allocates the memory for the results of the k-NN classification
+ * 
+ * @param r The structure containing the results
+ * @param true_positives The number of true positives 
+ * @param false_positives The number of false positives
+ * @param false_negatives The number of false negatives
+ * @param nb_test_samples The total number of test images (samples)
+ */
+void allocate_results(result_t *r, double **true_positives, double **false_positives, double **false_negatives, int nb_test_samples);
+
+
 
 #endif

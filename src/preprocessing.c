@@ -64,30 +64,6 @@ void fill_all_image_paths(char ****folder_array, char *flower_folder_paths[])
     }
 }
 
-void fill_test_file_paths(char **test_file_paths, char *test_folder_path)
-{
-    DIR *dir;
-    struct dirent *ent;
-    int file_index = 0;
-    char file_path[256];
-
-    if ((dir = opendir(test_folder_path)) != NULL)
-    {
-        while ((ent = readdir(dir)) != NULL)
-        {
-            if (ent->d_type == DT_REG)
-            {
-                strcpy(file_path, test_folder_path);
-                strcat(file_path, ent->d_name);
-                strcpy(test_file_paths[file_index], file_path);
-                file_index++;
-            }
-            
-        }
-        closedir(dir);
-    }
-}
-
 void resize_all_images(raw_image_t **image_array, int nb_samples, int **files_in_subfolders, raw_image_t **resized_image_array)
 {
     *resized_image_array = (raw_image_t *) calloc(nb_samples, sizeof(raw_image_t));
@@ -116,45 +92,6 @@ void bind_image_to_class(char *class_labels[], int *files_in_subfolders, raw_ima
             strcpy((*train_images)[index].class, class_labels[i]);
             index++;
         }
-    }
-}
-
-void save_jpeg_image_file(raw_image_t *image, char *file_path)
-{
-    struct jpeg_compress_struct info;
-    struct jpeg_error_mgr err;
-
-    unsigned char *row_buffer[1];
-
-    FILE *fp = fopen(file_path, "wb");
-    if (fp)
-    {
-        info.err = jpeg_std_error(&err);
-        jpeg_create_compress(&info);
-        jpeg_stdio_dest(&info, fp);
-        
-        info.image_width = image->width;
-        info.image_height = image->height;
-        info.input_components = NB_CHANNELS;
-        info.in_color_space = JCS_RGB;
-
-        jpeg_set_defaults(&info);
-        jpeg_set_quality(&info, IMG_QUALITY, TRUE);
-        jpeg_start_compress(&info, TRUE);
-
-        while (info.next_scanline < info.image_height)
-        {
-            row_buffer[0] = &(image->image_data[info.next_scanline * (image->width * NB_CHANNELS)]);
-            jpeg_write_scanlines(&info, row_buffer, 1);
-        }
-
-        jpeg_finish_compress(&info);
-        fclose(fp);
-        jpeg_destroy_compress(&info);
-    }
-    else
-    {
-        printf("Error opening file %s for writing\n", file_path);
     }
 }
 
@@ -198,5 +135,44 @@ void train_test_split(double test_size, int nb_samples, raw_image_t **train_imag
         
         index++;
         second_index++;
+    }
+}
+
+void save_jpeg_image_file(raw_image_t *image, char *file_path)
+{
+    struct jpeg_compress_struct info;
+    struct jpeg_error_mgr err;
+
+    unsigned char *row_buffer[1];
+
+    FILE *fp = fopen(file_path, "wb");
+    if (fp)
+    {
+        info.err = jpeg_std_error(&err);
+        jpeg_create_compress(&info);
+        jpeg_stdio_dest(&info, fp);
+        
+        info.image_width = image->width;
+        info.image_height = image->height;
+        info.input_components = NB_CHANNELS;
+        info.in_color_space = JCS_RGB;
+
+        jpeg_set_defaults(&info);
+        jpeg_set_quality(&info, IMG_QUALITY, TRUE);
+        jpeg_start_compress(&info, TRUE);
+
+        while (info.next_scanline < info.image_height)
+        {
+            row_buffer[0] = &(image->image_data[info.next_scanline * (image->width * NB_CHANNELS)]);
+            jpeg_write_scanlines(&info, row_buffer, 1);
+        }
+
+        jpeg_finish_compress(&info);
+        fclose(fp);
+        jpeg_destroy_compress(&info);
+    }
+    else
+    {
+        printf("Error opening file %s for writing\n", file_path);
     }
 }

@@ -4,6 +4,15 @@
 #include "types_constants.h"
 
 /**
+ * @brief Counts the number of files in a given subfolder
+ * 
+ * @param folder_path The path to the subfolder
+ * @return The number of files in the subfolder
+ */
+int count_files_in_folder(const char *folder_path);
+
+
+/**
  * @brief Counts the number of files per subfolder (number of samples per class) and computes the total number of samples (sum)
  * 
  * @param files_in_subfolders Array containing for each subfolder the number of files in it
@@ -12,13 +21,6 @@
  */
 void count_files_in_subfolders_and_nb_samples(int **files_in_subfolders, char *flower_folder_paths[], int *nb_samples);
 
-/**
- * @brief Counts the number of files in a given subfolder
- * 
- * @param folder_path The path to the subfolder
- * @return The number of files in the subfolder
- */
-int count_files_in_folder(const char *folder_path);
 
 /**
  * @brief Fils the array of array of strings representing the paths to the images with the paths to the images
