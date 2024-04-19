@@ -73,7 +73,7 @@ void allocate_file_paths(int **files_in_subfolders, char ****all_image_paths)
         (*all_image_paths)[i] = (char **) calloc((*files_in_subfolders)[i], sizeof(char *));
         for (int j = 0; j < (*files_in_subfolders)[i]; j++)
         {
-            (*all_image_paths)[i][j] = (char *) calloc(MAX_PATH_LENGTH, sizeof(char));
+            (*all_image_paths)[i][j] = (char *) calloc(MAX_STR_LENGTH, sizeof(char));
         }
         
     }
@@ -168,7 +168,7 @@ void allocate_results(result_t *r, double **true_positives, double **false_posit
     r->precisions = (double *) calloc(NB_CLASSES, sizeof(double));
     r->recalls = (double *) calloc(NB_CLASSES, sizeof(double));
     r->supports = (double *) calloc(NB_CLASSES, sizeof(double));
-    *true_positives = (double *) calloc(nb_test_samples, sizeof(double));
-    *false_positives = (double *) calloc(nb_test_samples, sizeof(double));
-    *false_negatives = (double *) calloc(nb_test_samples, sizeof(double));
+    *true_positives = (double *) calloc(NB_CLASSES, sizeof(double));
+    *false_positives = (double *) calloc(NB_CLASSES, sizeof(double));
+    *false_negatives = (double *) calloc(NB_CLASSES, sizeof(double));
 }

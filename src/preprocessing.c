@@ -1,3 +1,11 @@
+/**
+ * @file preprocessing.c
+ * @author Igor Robin (Igor.ROBIN@etu.isima.fr)
+ * @brief 
+ * @version 0.1
+ * @date 2024-04-18
+ */
+
 #include "preprocessing.h"
 
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
@@ -81,15 +89,15 @@ void resize_all_images(raw_image_t **image_array, int nb_samples, int **files_in
     }
 }
 
-void bind_image_to_class(char *class_labels[], int *files_in_subfolders, raw_image_t **train_images)
+void bind_image_to_class(char *class_labels[], int *files_in_subfolders, raw_image_t **resized_image_array)
 {
     int index = 0;
     for (int i = 0; i < NB_CLASSES; i++)
     {
         for (int j = 0; j < files_in_subfolders[i]; j++)
         {
-            (*train_images)[index].class = (char *) calloc(MAX_STR_LENGTH, sizeof(char));
-            strcpy((*train_images)[index].class, class_labels[i]);
+            (*resized_image_array)[index].class = (char *) calloc(MAX_STR_LENGTH, sizeof(char));
+            strcpy((*resized_image_array)[index].class, class_labels[i]);
             index++;
         }
     }

@@ -49,7 +49,7 @@ int main(void)
     raw_image_t *test_image_array = NULL;
     raw_image_t *train_image_array = NULL;
 
-    point_data_t *nearest_points_data = NULL;
+    point_data_t *points_data = NULL;
     point_data_t *k_nearest_neighbors = NULL;
 
     char **votes = NULL;
@@ -83,12 +83,12 @@ int main(void)
 
     for (int i = 0; i < nb_test_samples; i++)
     {
-        allocate_points_data(&nearest_points_data, nb_train_samples);
-        compute_points_data(&nearest_points_data, nb_train_samples, &train_image_array, &test_image_array, i, weighted_knn, m, p);
+        allocate_points_data(&points_data, nb_train_samples);
+        compute_points_data(&points_data, nb_train_samples, &train_image_array, &test_image_array, i, weighted_knn, m, p);
 
-        qsort(nearest_points_data, nb_train_samples, sizeof(point_data_t), compare_samples);
+        qsort(points_data, nb_train_samples, sizeof(point_data_t), compare_samples);
         allocate_knns(&k_nearest_neighbors, k);
-        isolate_knns(&k_nearest_neighbors, k, &nearest_points_data);
+        isolate_knns(&k_nearest_neighbors, k, &points_data);
 
         allocate_votes(&votes, k);
         allocate_counts(&counts);
@@ -96,9 +96,9 @@ int main(void)
         fill_votes(&votes, &train_image_array, &k_nearest_neighbors, k);
         compute_weighted_counts(&votes, k, class_labels, &counts, &k_nearest_neighbors);
 
-        find_prediction(&max_votes, &max_votes_index, NB_CLASSES, &counts, &ans, class_labels, &predictions, i);
+        find_prediction(&max_votes, &max_votes_index, &counts, &ans, class_labels, &predictions, i);
 
-        free_loop_data(&nearest_points_data, &k_nearest_neighbors, &votes, &counts, &ans, k);
+        free_loop_data(&points_data, &k_nearest_neighbors, &votes, &counts, &ans, k);
         printf("Percentage done : %lf \n", (double) i / (double) nb_test_samples * 100);
     }
 

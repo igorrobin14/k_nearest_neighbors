@@ -1,21 +1,21 @@
 /**
- * @file knn.c
+ * @file algorithm.c
  * @author Igor Robin (Igor.ROBIN@etu.isima.fr)
- * @brief Definition of functions at the heart of the k-NN algorithm
+ * @brief Central functions in the k-NN algorithm
  * @version 0.1
- * @date 2024-04-14
+ * @date 2024-04-18
  */
 
 #include "algorithm.h"
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 
-void compute_points_data(point_data_t **points_infos, int nb_train_samples, raw_image_t **samples_train, raw_image_t **samples_test, int i, bool weighted_knn, metric m, double p)
+void compute_points_data(point_data_t **points_data, int nb_train_samples, raw_image_t **samples_train, raw_image_t **samples_test, int i, bool weighted_knn, metric m, double p)
 {
     for (int j = 0; j < nb_train_samples; j++)
     {
-        (*points_infos)[j].distance = m(&(*samples_train)[j], &(*samples_test)[i], p);
-        (*points_infos)[j].index = j;
-        weighted_knn == true ? ((*points_infos)[j].weight = 1.0 / (*points_infos)[j].distance) : ((*points_infos)[j].weight = 1.0);
+        (*points_data)[j].distance = m(&(*samples_train)[j], &(*samples_test)[i], p);
+        (*points_data)[j].index = j;
+        weighted_knn == true ? ((*points_data)[j].weight = 1.0 / (*points_data)[j].distance) : ((*points_data)[j].weight = 1.0);
     }
 }
 
@@ -65,11 +65,11 @@ void compute_weighted_counts(char ***votes, int k, char *class_labels[], double 
 }
 
 
-void find_prediction(int *max_votes, int *max_votes_index, int number_of_classes, double **counts, char **ans, char *class_labels[], char ***predictions, int i)
+void find_prediction(int *max_votes, int *max_votes_index, double **counts, char **ans, char *class_labels[], char ***predictions, int i)
 {
     *max_votes = (*counts)[0];
     *max_votes_index = 0;
-    for (int l = 1; l < number_of_classes; l++)
+    for (int l = 1; l < NB_CLASSES; l++)
     {
         if ((*counts)[l] > *max_votes)
         {
