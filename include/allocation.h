@@ -60,16 +60,18 @@ void allocate_is_right_class(bool ** is_right_class, int nb_test_samples);
  * 
  * @param points_infos An array containing for every sample its distance, weight and index with respect to the currently processed test image
  * @param nb_train_samples The total number of train images (samples)
+ * @param nb_test_samples The total number of test images (samples)
  */
-void allocate_points_data(point_data_t **points_infos, int nb_train_samples);
+void allocate_points_data(point_data_t ***points_infos, int nb_train_samples, int nb_test_samples);
 
 /**
  * @brief Allocates an array for the k nearest neighbors
  * 
  * @param k_nearest_neighbors The k nearest neighbors in the points_infos array (the ones with minimal distance)
  * @param k The number of neighbors to consider
+ * @param nb_test_samples The total number of test images (samples)
  */
-void allocate_knns(point_data_t **k_nearest_neighbors, int k);
+void allocate_knns(point_data_t ***k_nearest_neighbors, int k, int nb_test_samples);
 
 /**
  * @brief Allocates the votes array

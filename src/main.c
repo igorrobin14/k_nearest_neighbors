@@ -81,24 +81,30 @@ int main(void)
     allocate_predicted_classes(&predictions, nb_test_samples);
     allocate_is_right_class(&is_right_class, nb_test_samples);
 
+    allocate_points_data(&points_data, nb_train_samples, nb_test_samples);
+    allocate_knns(&k_nearest_neighbors, k, nb_test_samples);
+    allocate_votes(&votes, k);
+    allocate_counts(&counts);
+    allocate_ans(&ans);
+
     for (int i = 0; i < nb_test_samples; i++)
     {
-        allocate_points_data(&points_data, nb_train_samples);
+        //allocate_points_data(&points_data, nb_train_samples);
         compute_points_data(&points_data, nb_train_samples, &train_image_array, &test_image_array, i, weighted_knn, m, p);
 
         qsort(points_data, nb_train_samples, sizeof(point_data_t), compare_samples);
-        allocate_knns(&k_nearest_neighbors, k);
+        //allocate_knns(&k_nearest_neighbors, k);
         isolate_knns(&k_nearest_neighbors, k, &points_data);
 
-        allocate_votes(&votes, k);
-        allocate_counts(&counts);
-        allocate_ans(&ans);
+        //allocate_votes(&votes, k);
+        //allocate_counts(&counts);
+        //allocate_ans(&ans);
         fill_votes(&votes, &train_image_array, &k_nearest_neighbors, k);
         compute_weighted_counts(&votes, k, class_labels, &counts, &k_nearest_neighbors);
 
         find_prediction(&max_votes, &max_votes_index, &counts, &ans, class_labels, &predictions, i);
 
-        free_loop_data(&points_data, &k_nearest_neighbors, &votes, &counts, &ans, k);
+        //free_loop_data(&points_data, &k_nearest_neighbors, &votes, &counts, &ans, k);
         printf("Percentage done : %lf \n", (double) i / (double) nb_test_samples * 100);
     }
 

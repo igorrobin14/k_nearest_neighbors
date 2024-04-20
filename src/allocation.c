@@ -110,17 +110,27 @@ void allocate_is_right_class(bool **is_right_class, int nb_test_samples)
 
 
 
-void allocate_points_data(point_data_t **points_infos, int nb_train_samples)
+void allocate_points_data(point_data_t ***points_infos, int nb_train_samples, int nb_test_samples)
 {
-    *points_infos = (point_data_t *) calloc(nb_train_samples, sizeof(point_data_t));
+    *points_infos = (point_data_t **) calloc(nb_test_samples, sizeof(point_data_t *));
+
+    for (int i = 0; i < nb_test_samples; i++)
+    {
+        (*points_infos)[i] = (point_data_t *) calloc(nb_train_samples, sizeof(point_data_t));
+    }
 }
 
-void allocate_knns(point_data_t **k_nearest_neighbors, int k)
+void allocate_knns(point_data_t ***k_nearest_neighbors, int k, int nb_test_samples)
 {
-    *k_nearest_neighbors = (point_data_t *) calloc(k, sizeof(point_data_t));
+    *k_nearest_neighbors = (points_data_t **) calloc(nb_test_samples, sizeof(point_data_t *));
+
+    for (int i = 0; i < nb_test_samples; i++)
+    {
+        (*k_nearest_neighbors)[i] = (point_data_t *) calloc(k, sizeof(point_data_t));
+    }
 }
 
-void allocate_votes(char ***votes, int k)
+void allocate_votes(char ***votes, int k, int nb_test_samples) // HERE
 {
     *votes = (char **) calloc(k, sizeof(char *));
     for (int l = 0; l < k; l++)
