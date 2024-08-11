@@ -23,7 +23,7 @@
  * @param m The metric used for computing distances
  * @param p The order of the Minkowski metric
  */
-void compute_points_data(point_data_t **points_data, int nb_train_samples, raw_image_t **samples_train, raw_image_t **samples_test, int i, bool weighted_knn, metric m, double p);
+void compute_points_data(point_data_t **points_data, int nb_train_samples, int nb_test_samples, raw_image_t **samples_train, raw_image_t **samples_test, bool weighted_knn, metric m, double p);
 
 /**
  * @brief Compares two samples based on their distance
@@ -41,7 +41,7 @@ int compare_samples(const void *a, const void *b);
  * @param k The number of neigbors considered in the k-NN algorithm
  * @param points_infos An array containing for every sample its distance, weight and index with respect to the currently processed test image
  */
-void isolate_knns(point_data_t **k_nearest_neighbors, int k, point_data_t **points_infos);
+void isolate_knns(point_data_t **k_nearest_neighbors, int k, int nb_test_samples, point_data_t **points_infos);
 
 /**
  * @brief Finds the predicted class for a sample
@@ -55,7 +55,7 @@ void isolate_knns(point_data_t **k_nearest_neighbors, int k, point_data_t **poin
  * @param predictions An array of strings where the i-th element is the prediceted class (string) for the i-th image (sample)
  * @param i The currently processed image is the i-th test image (sample)
  */
-void find_prediction(int *max_votes, int *max_votes_index, double **counts, char **ans, char *class_labels[], char ***predictions, int i);
+void find_prediction(int *max_votes, int *max_votes_index, double ***counts, char ***ans, char *class_labels[], char ***predictions, int nb_test_samples);
 
 /**
  * @brief Fills the votes array with all the class labels corresponding to the k nearest neighbors
@@ -65,7 +65,7 @@ void find_prediction(int *max_votes, int *max_votes_index, double **counts, char
  * @param k_nearest_neighbors The k nearest neighbors in the points_infos array (the ones with minimal distance)
  * @param k The number of neighbors considered
  */
-void fill_votes(char ***votes, raw_image_t **samples_train, point_data_t **k_nearest_neighbors, int k);
+void fill_votes(char ****votes, raw_image_t **samples_train, point_data_t ***k_nearest_neighbors, int k, int nb_test_samples);
 
 /**
  * @brief Computes the number of votes for each class by summing all votes for each class and weighting them by inverse distance if desired
@@ -76,6 +76,6 @@ void fill_votes(char ***votes, raw_image_t **samples_train, point_data_t **k_nea
  * @param counts An array where the i-th element is the weighted sum of votes for the i-th class label
  * @param k_nearest_neighbors The k nearest neighbors in the points_infos array (the ones with minimal distance)
  */
-void compute_weighted_counts(char ***votes, int k, char *class_labels[], double **counts, point_data_t **k_nearest_neighbors);
+void compute_weighted_counts(char ****votes, int k, char *class_labels[], double ***counts, point_data_t ***k_nearest_neighbors, int nb_test_samples);
 
 #endif

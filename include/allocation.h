@@ -39,6 +39,8 @@ void allocate_file_paths(int **files_in_subfolders, char ****all_image_paths);
  */
 void allocate_all_images(raw_image_t **image_array, int nb_samples, int **files_in_subfolders, char ****all_image_paths);
 
+//void fill_votes(char ****votes, raw_image_t **samples_train, point_data_t ***k_nearest_neighbors, int k, int nb_test_samples);
+
 /**
  * @brief Allocates the predictions and the is_right_class array
  * 
@@ -79,21 +81,21 @@ void allocate_knns(point_data_t ***k_nearest_neighbors, int k, int nb_test_sampl
  * @param votes An array where the i-th element is the number of votes for the i-th class label
  * @param k The number of neighbors considered
  */
-void allocate_votes(char ***votes, int k);
+void allocate_votes(char ****votes, int k, int nb_test_samples);
 
 /**
  * @brief Allocates the counts array
  * 
  * @param counts An array where the i-th element is the weighted sum of votes for the i-th class label
  */
-void allocate_counts(double **counts);
+void allocate_counts(double ***counts, int nb_test_samples);
 
 /**
  * @brief Allocates the ans string
  * 
  * @param ans The predicted class for the currently processed test image (sample)
  */
-void allocate_ans(char **ans);
+void allocate_ans(char ***ans, int nb_test_samples);
 
 /**
  * @brief Frees the memory allocated at every main loop iteration
@@ -105,7 +107,7 @@ void allocate_ans(char **ans);
  * @param ans The predicted class for the currently processed test image (sample)
  * @param k The number of neighbors for the k-NN algorithm
  */
-void free_loop_data(point_data_t **points_infos, point_data_t **k_nearest_neighbors, char ***votes, double **counts, char **ans, int k);
+void free_loop_data(point_data_t ***points_infos, point_data_t ***k_nearest_neighbors, char ****votes, double ***counts, char ***ans, int k, int nb_test_samples);
 
 /**
  * @brief Allocates the memory for the results of the k-NN classification

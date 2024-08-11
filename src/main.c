@@ -49,12 +49,12 @@ int main(void)
     raw_image_t *test_image_array = NULL;
     raw_image_t *train_image_array = NULL;
 
-    point_data_t *points_data = NULL;
-    point_data_t *k_nearest_neighbors = NULL;
+    point_data_t **points_data = NULL;
+    point_data_t **k_nearest_neighbors = NULL;
 
-    char **votes = NULL;
-    double *counts = NULL;
-    char *ans = NULL;
+    char ***votes = NULL;
+    double **counts = NULL;
+    char **ans = NULL;
     int max_votes = 0, max_votes_index = 0;
     int nb_trues = 0, nb_falses = 0;
 
@@ -102,11 +102,14 @@ int main(void)
         fill_votes(&votes, &train_image_array, &k_nearest_neighbors, k);
         compute_weighted_counts(&votes, k, class_labels, &counts, &k_nearest_neighbors);
 
-        find_prediction(&max_votes, &max_votes_index, &counts, &ans, class_labels, &predictions, i);
+        fill_votes(&votes, &train_image_array, &k_nearest_neighbors, k, nb_test_samples);
+        compute_weighted_counts(&votes, k, class_labels, &counts, &k_nearest_neighbors, nb_test_samples);
 
-        //free_loop_data(&points_data, &k_nearest_neighbors, &votes, &counts, &ans, k);
-        printf("Percentage done : %lf \n", (double) i / (double) nb_test_samples * 100);
-    }
+        find_prediction(&max_votes, &max_votes_index, &counts, &ans, class_labels, &predictions, nb_test_samples);
+
+        free_loop_data(&points_data, &k_nearest_neighbors, &votes, &counts, &ans, k, nb_test_samples);
+        //printf("Percentage done : %lf \n", (double) i / (double) nb_test_samples * 100);
+    //}
 
     allocate_results(&r, &true_positives, &false_positives, &false_negatives, nb_test_samples);
     compute_accuracy(&r, nb_test_samples, &predictions, &test_image_array, &is_right_class, &nb_trues, &nb_falses);

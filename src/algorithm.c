@@ -9,13 +9,21 @@
 #include "algorithm.h"
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 
-void compute_points_data(point_data_t **points_data, int nb_train_samples, raw_image_t **samples_train, raw_image_t **samples_test, int i, bool weighted_knn, metric m, double p)
+void compute_points_data(point_data_t **points_data, int nb_train_samples, int nb_test_samples, raw_image_t **samples_train, raw_image_t **samples_test, bool weighted_knn, metric m, double p)
 {
-    for (int j = 0; j < nb_train_samples; j++)
+    for (int i = 0; i < nb_test_samples; i++)
     {
-        (*points_data)[j].distance = m(&(*samples_train)[j], &(*samples_test)[i], p);
-        (*points_data)[j].index = j;
-        weighted_knn == true ? ((*points_data)[j].weight = 1.0 / (*points_data)[j].distance) : ((*points_data)[j].weight = 1.0);
+        //printf("i: %d\n", i);
+        for (int j = 0; j < nb_train_samples; j++)
+        {
+            //printf("distance: %lf\n", m(&(*samples_train)[j], &(*samples_test)[i], p));
+            points_data[i][j].distance = m(&(*samples_train)[j], &(*samples_test)[i], p);
+            points_data[i][j].index = j;
+            weighted_knn == true ? (points_data[i][j].weight = 1.0 / points_data[i][j].distance) : (points_data[i][j].weight = 1.0);
+        }
+        printf("i: %d\n", i);
+
+        qsort(points_data[i], nb_train_samples, sizeof(point_data_t), compare_samples);
     }
 }
 
@@ -41,42 +49,51 @@ int compare_samples(const void *a, const void *b)
     return result;
 }
 
-void isolate_knns(point_data_t **k_nearest_neighbors, int k, point_data_t **points_infos)
+void isolate_knns(point_data_t **k_nearest_neighbors, int k, int nb_test_samples, point_data_t **points_infos)
 {
-    for (int l = 0; l < k; l++)
+    for (int i = 0; i < nb_test_samples; i++)
     {
-        (*k_nearest_neighbors)[l] = (*points_infos)[l];
+        for (int l = 0; l < k; l++)
+        {
+            k_nearest_neighbors[i][l] = points_infos[i][l];
+        }
     }
 
 }
 
-void compute_weighted_counts(char ***votes, int k, char *class_labels[], double **counts, point_data_t **k_nearest_neighbors)
+void compute_weighted_counts(char ****votes, int k, char *class_labels[], double ***counts, point_data_t ***k_nearest_neighbors, int nb_test_samples)
 {
-    for (int l = 0; l < NB_CLASSES; l++)
+    for (int i = 0; i < nb_test_samples; i++)
     {
-        for (int m = 0; m < k; m++)
+        for (int l = 0; l < NB_CLASSES; l++)
         {
-            if (strcmp((*votes)[m], class_labels[l]) == 0)
+            for (int m = 0; m < k; m++)
             {
-                (*counts)[l] += (1.0 * (*k_nearest_neighbors)[m].weight);
+                if (strcmp((*votes)[i][m], class_labels[l]) == 0)
+                {
+                    (*counts)[i][l] += (1.0 * (*k_nearest_neighbors)[i][m].weight);
+                }
+            }
+        } 
+    }
+}
+
+
+void find_prediction(int *max_votes, int *max_votes_index, double ***counts, char ***ans, char *class_labels[], char ***predictions, int nb_test_samples)
+{
+    for (int i = 0; i < nb_test_samples; i++)
+    {
+        *max_votes = (*counts)[i][0];
+        *max_votes_index = 0;
+        for (int l = 1; l < NB_CLASSES; l++)
+        {
+            if ((*counts)[i][l] > *max_votes)
+            {
+                *max_votes = (*counts)[i][l];
+                *max_votes_index = l;
             }
         }
-    } 
-}
-
-
-void find_prediction(int *max_votes, int *max_votes_index, double **counts, char **ans, char *class_labels[], char ***predictions, int i)
-{
-    *max_votes = (*counts)[0];
-    *max_votes_index = 0;
-    for (int l = 1; l < NB_CLASSES; l++)
-    {
-        if ((*counts)[l] > *max_votes)
-        {
-            *max_votes = (*counts)[l];
-            *max_votes_index = l;
-        }
+        strcpy((*ans)[i], class_labels[*max_votes_index]);
+        strcpy((*predictions)[i], (*ans)[i]);
     }
-    strcpy(*ans, class_labels[*max_votes_index]);
-    strcpy((*predictions)[i], *ans);
 }

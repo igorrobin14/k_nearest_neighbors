@@ -21,3 +21,6 @@ target_link_libraries(${PROJECT_NAME} jpeg)
 
 # Add optimization flags
 target_compile_options(${PROJECT_NAME} PRIVATE -Ofast -g)
+
+# Add custom command
+add_custom_target(launch COMMAND ./knn_images DEPENDS knn_images WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} COMMENT "Launching k-NN with images")
