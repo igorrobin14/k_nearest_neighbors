@@ -13,10 +13,8 @@ void compute_points_data(point_data_t **points_data, int nb_train_samples, int n
 {
     for (int i = 0; i < nb_test_samples; i++)
     {
-        //printf("i: %d\n", i);
         for (int j = 0; j < nb_train_samples; j++)
         {
-            //printf("distance: %lf\n", m(&(*samples_train)[j], &(*samples_test)[i], p));
             points_data[i][j].distance = m(&(*samples_train)[j], &(*samples_test)[i], p);
             points_data[i][j].index = j;
             weighted_knn == true ? (points_data[i][j].weight = 1.0 / points_data[i][j].distance) : (points_data[i][j].weight = 1.0);

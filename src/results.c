@@ -12,7 +12,6 @@ double compute_accuracy(result_t *r, int nb_test_samples, char ***predictions, r
 {
     for (int i = 0; i < nb_test_samples; i++)
     {
-        //printf("%s\n", (*samples_test)[i].class);
         strcmp((*predictions)[i], (*samples_test)[i].class) == 0 ? ((*is_right_class)[i] = true) : ((*is_right_class)[i] = false);
         (*is_right_class)[i] == true ? ((*nb_trues)++) : ((*nb_falses)++);
     }
@@ -77,16 +76,12 @@ void compute_supports(result_t *r, char *class_labels[], raw_image_t **samples_t
 
 void compute_results(result_t *r, double **true_positives, double **false_positives, double **false_negatives, char *class_labels[], raw_image_t **samples_test, int nb_test_samples)
 {
-    //double precision_mavg = 0;
     r->precision_mavg = 0;
     r->recall_mavg = 0;
     r->precision_wavg = 0;
     r->recall_wavg = 0;
     r->f1_score_mavg = 0;
     r->f1_score_wavg = 0;
-    //double recall_mavg = 0;
-    //double precision_wavg = 0;
-    //double recall_wavg = 0;
 
     compute_supports(r, class_labels, samples_test, nb_test_samples);
     for (int i = 0; i < NB_CLASSES; i++)

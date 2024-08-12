@@ -84,7 +84,6 @@ void resize_all_images(raw_image_t **image_array, int nb_samples, int **files_in
             resized_image.image_data = (unsigned char *) calloc(RESIZED_IMG_SIZE * RESIZED_IMG_SIZE * NB_CHANNELS, sizeof(unsigned char));
             stbir_resize_uint8_linear((*image_array)[index].image_data, (*image_array)[index].width, (*image_array)[index].height, 0, resized_image.image_data, resized_image.width, resized_image.height, 0, STBIR_RGB);
             (*resized_image_array)[index] = resized_image;
-            //free(resized_image.image_data);
             index++;
         }
     }

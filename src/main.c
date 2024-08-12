@@ -82,35 +82,19 @@ int main(void)
     allocate_is_right_class(&is_right_class, nb_test_samples);
 
     allocate_points_data(&points_data, nb_train_samples, nb_test_samples);
+    compute_points_data(points_data, nb_train_samples, nb_test_samples, &train_image_array, &test_image_array, weighted_knn, m, p);
+
     allocate_knns(&k_nearest_neighbors, k, nb_test_samples);
-    allocate_votes(&votes, k);
-    allocate_counts(&counts);
-    allocate_ans(&ans);
+    isolate_knns(k_nearest_neighbors, k, nb_test_samples, points_data);
 
-    for (int i = 0; i < nb_test_samples; i++)
-    {
-        //allocate_points_data(&points_data, nb_train_samples);
-        compute_points_data(&points_data, nb_train_samples, &train_image_array, &test_image_array, i, weighted_knn, m, p);
+    allocate_votes(&votes, k, nb_test_samples);
+    allocate_counts(&counts, nb_test_samples);
+    allocate_ans(&ans, nb_test_samples);
 
-        qsort(points_data, nb_train_samples, sizeof(point_data_t), compare_samples);
-        //allocate_knns(&k_nearest_neighbors, k);
-        isolate_knns(&k_nearest_neighbors, k, &points_data);
+    fill_votes(&votes, &train_image_array, &k_nearest_neighbors, k, nb_test_samples);
+    compute_weighted_counts(&votes, k, class_labels, &counts, &k_nearest_neighbors, nb_test_samples);
 
-        //allocate_votes(&votes, k);
-        //allocate_counts(&counts);
-        //allocate_ans(&ans);
-        fill_votes(&votes, &train_image_array, &k_nearest_neighbors, k);
-        compute_weighted_counts(&votes, k, class_labels, &counts, &k_nearest_neighbors);
-
-        fill_votes(&votes, &train_image_array, &k_nearest_neighbors, k, nb_test_samples);
-        compute_weighted_counts(&votes, k, class_labels, &counts, &k_nearest_neighbors, nb_test_samples);
-
-        find_prediction(&max_votes, &max_votes_index, &counts, &ans, class_labels, &predictions, nb_test_samples);
-
-        //free_data(&points_data, &k_nearest_neighbors, &votes, &counts, &ans, &image_array, &resized_image_array, &train_image_array, &test_image_array, k, nb_test_samples);
-        //free_data(&points_data, &k_nearest_neighbors, &votes, &counts, &ans, &image_array, &resized_image_array, &train_image_array, &test_image_array, &files_in_subfolders, &predictions, &is_right_class, k, nb_test_samples);
-        //printf("Percentage done : %lf \n", (double) i / (double) nb_test_samples * 100);
-    //}
+    find_prediction(&max_votes, &max_votes_index, &counts, &ans, class_labels, &predictions, nb_test_samples);
 
     allocate_results(&r, &true_positives, &false_positives, &false_negatives, nb_test_samples);
     compute_accuracy(&r, nb_test_samples, &predictions, &test_image_array, &is_right_class, &nb_trues, &nb_falses);
