@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include <pthread.h>
 
 #include <jpeglib.h>
 #include <jerror.h>

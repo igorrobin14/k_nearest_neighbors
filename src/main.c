@@ -107,7 +107,8 @@ int main(void)
 
         find_prediction(&max_votes, &max_votes_index, &counts, &ans, class_labels, &predictions, nb_test_samples);
 
-        free_loop_data(&points_data, &k_nearest_neighbors, &votes, &counts, &ans, k, nb_test_samples);
+        //free_data(&points_data, &k_nearest_neighbors, &votes, &counts, &ans, &image_array, &resized_image_array, &train_image_array, &test_image_array, k, nb_test_samples);
+        //free_data(&points_data, &k_nearest_neighbors, &votes, &counts, &ans, &image_array, &resized_image_array, &train_image_array, &test_image_array, &files_in_subfolders, &predictions, &is_right_class, k, nb_test_samples);
         //printf("Percentage done : %lf \n", (double) i / (double) nb_test_samples * 100);
     //}
 
@@ -118,6 +119,9 @@ int main(void)
     compute_false_negatives(&predictions, &test_image_array, class_labels, nb_test_samples, &false_negatives);
     compute_results(&r, &true_positives, &false_positives, &false_negatives, class_labels, &test_image_array, nb_test_samples);
     display_results(&r, class_labels);
+
+    free_data(&points_data, &k_nearest_neighbors, &votes, &counts, &ans, &image_array, &resized_image_array, &train_image_array, &test_image_array, &files_in_subfolders, &predictions, &is_right_class, &all_image_paths, k, nb_test_samples);
+    free_results(&true_positives, &false_positives, &false_negatives, &r);
 
     return 0;
 }

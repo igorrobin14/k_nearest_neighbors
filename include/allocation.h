@@ -17,7 +17,7 @@
  * @param image_path The path to the image
  * @return The open and loaded image 
  */
-raw_image_t load_jpeg_image_file(char *image_path);
+raw_image_t *load_jpeg_image_file(char *image_path, raw_image_t *new_image);
 
 /**
  * @brief Allocates an array where each element is an array of strings representing the paths to all the images
@@ -107,7 +107,7 @@ void allocate_ans(char ***ans, int nb_test_samples);
  * @param ans The predicted class for the currently processed test image (sample)
  * @param k The number of neighbors for the k-NN algorithm
  */
-void free_loop_data(point_data_t ***points_infos, point_data_t ***k_nearest_neighbors, char ****votes, double ***counts, char ***ans, int k, int nb_test_samples);
+void free_data(point_data_t ***points_infos, point_data_t ***k_nearest_neighbors, char ****votes, double ***counts, char ***ans, raw_image_t **image_array, raw_image_t **resized_image_array, raw_image_t **train_image_array, raw_image_t **test_image_array, int **files_in_subfolders, char ***predictions, bool **is_right_class, char ****all_image_paths, int k, int nb_test_samples);
 
 /**
  * @brief Allocates the memory for the results of the k-NN classification
@@ -119,5 +119,7 @@ void free_loop_data(point_data_t ***points_infos, point_data_t ***k_nearest_neig
  * @param nb_test_samples The total number of test images (samples)
  */
 void allocate_results(result_t *r, double **true_positives, double **false_positives, double **false_negatives, int nb_test_samples);
+
+void free_results(double **true_positives, double **false_positives, double **false_negatives, result_t *r);
 
 #endif

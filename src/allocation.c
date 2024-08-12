@@ -9,12 +9,16 @@
 #include "allocation.h"
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 
-raw_image_t load_jpeg_image_file(char *image_path)
+raw_image_t *load_jpeg_image_file(char *image_path, raw_image_t *new_image)
 {
     struct jpeg_decompress_struct info;
     struct jpeg_error_mgr err;
 
-    raw_image_t new_image = {0, 0, 0, NULL, NULL};
+    raw_image_t new_im = {0, 0, 0, NULL, NULL};
+    //raw_image_t *new_image = &new_im;
+    new_image->num_components = 0;
+    new_image->width = 0;
+    new_image->height = 0;
 
     unsigned long int new_image_width, new_image_height;
     int num_components;
@@ -41,10 +45,10 @@ raw_image_t load_jpeg_image_file(char *image_path)
         dw_buffer_bytes = new_image_width * new_image_height * NB_CHANNELS;
         new_image_data = (unsigned char *) malloc(dw_buffer_bytes * sizeof(unsigned char));
 
-        new_image.num_components = num_components;
-        new_image.width = new_image_width;
-        new_image.height = new_image_height;
-        new_image.image_data = new_image_data;
+        new_image->num_components = num_components;
+        new_image->width = new_image_width;
+        new_image->height = new_image_height;
+        new_image->image_data = new_image_data;
 
         while (info.output_scanline < info.output_height)
         {
@@ -55,11 +59,14 @@ raw_image_t load_jpeg_image_file(char *image_path)
         jpeg_finish_decompress(&info);
         jpeg_destroy_decompress(&info);
         fclose(fp);
+        //free(new_image_data);
     }
     else
     {
         printf("Error opening file %s\n", image_path);
     }
+
+    //free(new_image_data);
 
     return new_image;
 }
@@ -87,7 +94,8 @@ void allocate_all_images(raw_image_t **image_array, int nb_samples, int **files_
     {
         for (int j = 0; j < (*files_in_subfolders)[i]; j++)
         {
-            (*image_array)[index] = load_jpeg_image_file((*all_image_paths)[i][j]);
+            raw_image_t new_im = {0, 0, 0, NULL, NULL};
+            (*image_array)[index] = *load_jpeg_image_file((*all_image_paths)[i][j], &new_im);
             index++;
         }
     }
@@ -107,8 +115,6 @@ void allocate_is_right_class(bool **is_right_class, int nb_test_samples)
 {
     *is_right_class = (bool *) calloc(nb_test_samples, sizeof(bool));
 }
-
-
 
 void allocate_points_data(point_data_t ***points_infos, int nb_train_samples, int nb_test_samples)
 {
@@ -174,26 +180,83 @@ void fill_votes(char ****votes, raw_image_t **samples_train, point_data_t ***k_n
 }
 
 
-
-void free_loop_data(point_data_t ***points_infos, point_data_t ***k_nearest_neighbors, char ****votes, double ***counts, char ***ans, int k, int nb_test_samples)
+/*
+void free_data(point_data_t ***points_infos, point_data_t ***k_nearest_neighbors, char ****votes, double ***counts, char ***ans, raw_image_t **image_array, raw_image_t **resized_image_array, raw_image_t **train_image_array, raw_image_t **test_image_array, int **files_in_subfolders, char ***predictions, bool **is_right_class, char ****all_image_paths, int k, int nb_test_samples)
 {
-    for (int i = 0; i < nb_test_samples; i++)
+
+    //*all_image_paths = (char ***) calloc(NB_CLASSES, sizeof(char **));
+
+    for (int i = 0; i < NB_CLASSES; i++)
     {
-        free((*points_infos)[i]);
-        free((*k_nearest_neighbors)[i]);
-        for (int l = 0; l < k; l++)
+        //(*all_image_paths)[i] = (char **) calloc((*files_in_subfolders)[i], sizeof(char *));
+        for (int j = 0; j < (*files_in_subfolders)[i]; j++)
         {
-            free((*votes)[i][l]);
+            free(all_image_paths[i][j]);// = (char *) calloc(MAX_STR_LENGTH, sizeof(char));
         }
-        free((*votes)[i]);
-        free((*counts)[i]);
-        free((*ans)[i]);
+        free(all_image_paths[i]);
     }
 
-    free(*votes);
-    free(*counts);
-    free(*ans);
+    free(all_image_paths);
+
+   
+    int index = 0;
+    //*image_array = (raw_image_t *) calloc(nb_samples, sizeof(raw_image_t));
+    for (int i = 0; i < NB_CLASSES; i++)
+    {
+        //free(image_array[index]);
+        for (int j = 0; j < (*files_in_subfolders)[i]; j++)
+        {
+            free(image_array[index]);
+            // = *load_jpeg_image_file((*all_image_paths)[i][j]);
+            index++;
+        }
+    }
+
+    free(image_array);
+
+    for (int i = 0; i < NB_CLASSES; i++)
+    {
+        //free(resized_image_array[index]);
+        for (int j = 0; j < (*files_in_subfolders)[i]; j++)
+        {
+            free(resized_image_array[index]);// = (unsigned char *) calloc(RESIZED_IMG_SIZE * RESIZED_IMG_SIZE * NB_CHANNELS, sizeof(unsigned char));
+            //stbir_resize_uint8_linear((*image_array)[index].image_data, (*image_array)[index].width, (*image_array)[index].height, 0, resized_image.image_data, resized_image.width, resized_image.height, 0, STBIR_RGB);
+            //(*resized_image_array)[index] = resized_image;
+            //free(resized_image.image_data);
+            index++;
+        }
+    }
+
+    free(files_in_subfolders);
+
+
+    free(resized_image_array);
+    free(train_image_array);
+    free(test_image_array);
+    free(is_right_class);
+    
+    for (int i = 0; i < nb_test_samples; i++)
+    {
+        free(predictions[i]);
+        free(points_infos[i]);
+        free(k_nearest_neighbors[i]);
+        for (int l = 0; l < k; l++)
+        {
+            free(votes[i][l]);
+        }
+        free(votes[i]);
+        free(counts[i]);
+        free(ans[i]);
+    }
+
+    free(points_infos);
+    free(k_nearest_neighbors);
+    free(predictions);
+    free(votes);
+    free(counts);
+    free(ans);
 }
+*/
 
 void allocate_results(result_t *r, double **true_positives, double **false_positives, double **false_negatives, int nb_test_samples)
 {
@@ -205,3 +268,127 @@ void allocate_results(result_t *r, double **true_positives, double **false_posit
     *false_positives = (double *) calloc(NB_CLASSES, sizeof(double));
     *false_negatives = (double *) calloc(NB_CLASSES, sizeof(double));
 }
+
+void free_results(double **true_positives, double **false_positives, double **false_negatives, result_t *r)
+{
+    free(r->f1_scores);
+    free(r->precisions);
+    free(r->recalls);
+    free(r->supports);
+
+    free(*true_positives);
+    free(*false_positives);
+    free(*false_negatives);
+}
+
+/*
+void free_data(point_data_t ***points_infos, point_data_t ***k_nearest_neighbors, char ****votes, double ***counts, char ***ans, raw_image_t **image_array, raw_image_t **resized_image_array, raw_image_t **train_image_array, raw_image_t **test_image_array, int **files_in_subfolders, char ***predictions, bool **is_right_class, char ****all_image_paths, int k, int nb_test_samples)
+{
+    for (int i = 0; i < NB_CLASSES; i++)
+    {
+        for (int j = 0; j < (*files_in_subfolders)[i]; j++)
+        {
+            free((*all_image_paths)[i][j]);
+        }
+        free((*all_image_paths)[i]);
+    }
+    free(*all_image_paths);
+
+    int index = 0;
+    for (int i = 0; i < NB_CLASSES; i++)
+    {
+        for (int j = 0; j < (*files_in_subfolders)[i]; j++)
+        {
+            free((*resized_image_array)[index].class);
+            free((*image_array)[index].image_data);
+            free(&(*image_array)[index]);
+            free((*resized_image_array)[index].image_data);
+            index++;
+        }
+    }
+
+    free(*image_array);
+    free(*resized_image_array);
+    free(*train_image_array);
+    free(*test_image_array);
+    free(*is_right_class);
+
+    for (int i = 0; i < nb_test_samples; i++)
+    {
+        free((*predictions)[i]);
+        free((*points_infos)[i]);
+        free((*k_nearest_neighbors)[i]);
+        for (int l = 0; l < k; l++)
+        {
+            free((*votes)[i][l]);
+        }
+        free((*votes)[i]);
+        free((*counts)[i]);
+        free((*ans)[i]);
+    }
+
+    free(*points_infos);
+    free(*k_nearest_neighbors);
+    free(*predictions);
+    free(*votes);
+    free(*counts);
+    free(*ans);
+    free(*files_in_subfolders);
+}
+*/
+void free_data(point_data_t ***points_infos, point_data_t ***k_nearest_neighbors, char ****votes, double ***counts, char ***ans, raw_image_t **image_array, raw_image_t **resized_image_array, raw_image_t **train_image_array, raw_image_t **test_image_array, int **files_in_subfolders, char ***predictions, bool **is_right_class, char ****all_image_paths, int k, int nb_test_samples)
+{
+    for (int i = 0; i < NB_CLASSES; i++)
+    {
+        for (int j = 0; j < (*files_in_subfolders)[i]; j++)
+        {
+            free((*all_image_paths)[i][j]);
+        }
+        free((*all_image_paths)[i]);
+    }
+    free(*all_image_paths);
+
+    int index = 0;
+    for (int i = 0; i < NB_CLASSES; i++)
+    {
+        for (int j = 0; j < (*files_in_subfolders)[i]; j++)
+        {
+            // Free dynamically allocated data in each image structure
+            free((*image_array)[index].image_data);
+            free((*resized_image_array)[index].image_data);
+            free((*resized_image_array)[index].class);
+            // Note: Do not free the structure itself, as `calloc` allocated the entire array.
+            index++;
+        }
+    }
+
+    // Free the arrays themselves
+    free(*image_array);
+    free(*resized_image_array);
+    free(*train_image_array);
+    free(*test_image_array);
+    free(*is_right_class);
+
+    for (int i = 0; i < nb_test_samples; i++)
+    {
+        free((*predictions)[i]);
+        free((*points_infos)[i]);
+        free((*k_nearest_neighbors)[i]);
+        for (int l = 0; l < k; l++)
+        {
+            free((*votes)[i][l]);
+        }
+        free((*votes)[i]);
+        free((*counts)[i]);
+        free((*ans)[i]);
+    }
+
+    free(*points_infos);
+    free(*k_nearest_neighbors);
+    free(*predictions);
+    free(*votes);
+    free(*counts);
+    free(*ans);
+    free(*files_in_subfolders);
+}
+
