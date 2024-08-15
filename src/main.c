@@ -16,6 +16,8 @@
 
 int main(void)
 {
+    clock_t start_time = clock();
+
     int k = 10;
     bool weighted_knn = false;
 
@@ -106,6 +108,10 @@ int main(void)
 
     free_data(&points_data, &k_nearest_neighbors, &votes, &counts, &ans, &image_array, &resized_image_array, &train_image_array, &test_image_array, &files_in_subfolders, &predictions, &is_right_class, &all_image_paths, k, nb_test_samples);
     free_results(&true_positives, &false_positives, &false_negatives, &r);
+
+    clock_t end_time = clock();
+
+    printf("Execution time: %.2lf seconds\n", (double) (end_time - start_time) / (double) CLOCKS_PER_SEC);
 
     return 0;
 }

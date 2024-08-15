@@ -1,6 +1,10 @@
 # CMake minimum version required
 cmake_minimum_required(VERSION 3.5)
 
+set(CMAKE_C_STANDARD 11)
+
+set(CMAKE_C_STANDARD_REQUIRED True)
+
 # Project name and type
 project(knn_images C)
 
@@ -13,11 +17,10 @@ include_directories(include)
 # Create executable
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-# Link math library
-target_link_libraries(${PROJECT_NAME} m)
+add_compile_options(-std=c11)
 
-# Link jpeg library
-target_link_libraries(${PROJECT_NAME} jpeg)
+# Link libraries
+target_link_libraries(${PROJECT_NAME} m jpeg)
 
 # Add optimization flags
 target_compile_options(${PROJECT_NAME} PRIVATE -Ofast -g)
