@@ -9,6 +9,36 @@
 #include "algorithm.h"
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 
+void *process_part(void *arg)
+{
+    thread_data_t *data = (thread_data_t *) arg;
+    int start = data->start_index;
+    int end = data->end_index;
+
+    point_data_t **points_data = data->points_data;
+    int nb_train_samples = data->nb_train_samples;
+    raw_image_t **samples_test = data->samples_test;
+    raw_image_t **samples_train = data->samples_train;
+    int p = data->p;
+    bool weighted_knn = data->weighted_knn;
+    metric m = data->m;
+
+
+    for (int i = start; i < end; i++)
+    {
+        for (int j = 0; j < nb_train_samples; j++)
+        {
+            points_data[i][j].distance = m(&(*samples_train)[j], &(*samples_test)[i], p);
+            points_data[i][j].index = j;
+            weighted_knn == true ? (points_data[i][j].weight = 1.0 / points_data[i][j].distance) : (points_data[i][j].weight = 1.0);
+        }
+        printf("i: %d\n", i);
+
+        qsort(points_data[i], nb_train_samples, sizeof(point_data_t), compare_samples);
+    }
+}
+
+/*
 void compute_points_data(point_data_t **points_data, int nb_train_samples, int nb_test_samples, raw_image_t **samples_train, raw_image_t **samples_test, bool weighted_knn, metric m, double p)
 {
     for (int i = 0; i < nb_test_samples; i++)
@@ -24,6 +54,7 @@ void compute_points_data(point_data_t **points_data, int nb_train_samples, int n
         qsort(points_data[i], nb_train_samples, sizeof(point_data_t), compare_samples);
     }
 }
+*/
 
 int compare_samples(const void *a, const void *b)
 {

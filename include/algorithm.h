@@ -23,7 +23,8 @@
  * @param m The metric used for computing distances
  * @param p The order of the Minkowski metric
  */
-void compute_points_data(point_data_t **points_data, int nb_train_samples, int nb_test_samples, raw_image_t **samples_train, raw_image_t **samples_test, bool weighted_knn, metric m, double p);
+//void compute_points_data(point_data_t **points_data, int nb_train_samples, int nb_test_samples, raw_image_t **samples_train, raw_image_t **samples_test, bool weighted_knn, metric m, double p);
+void *process_part(void *arg);
 
 /**
  * @brief Compares two samples based on their distance

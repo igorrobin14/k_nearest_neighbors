@@ -8,12 +8,15 @@
 #include <time.h>
 #include <math.h>
 #include <time.h>
+#include <pthread.h>
 
 #include <jpeglib.h>
 #include <jerror.h>
 
 #define _USE_MISC
 #include <dirent.h>
+
+#define NB_THREADS 10
 
 /**
  * @brief The total number of classes
@@ -67,6 +70,25 @@ typedef struct point_data
 point_data_t;
 
 /**
+ * @typedef A metric
+ */
+typedef double (*metric) (raw_image_t *, raw_image_t *, double);
+
+typedef struct thread_data
+{
+    int start_index;
+    int end_index;
+    point_data_t **points_data;
+    int nb_train_samples;
+    raw_image_t **samples_train;
+    raw_image_t **samples_test;
+    bool weighted_knn;
+    metric m;
+    double p;
+}
+thread_data_t;
+
+/**
  * @struct The results structure
  */
 typedef struct result
@@ -81,10 +103,5 @@ typedef struct result
     double accuracy;
 }
 result_t;
-
-/**
- * @typedef A metric
- */
-typedef double (*metric) (raw_image_t *, raw_image_t *, double);
 
 #endif

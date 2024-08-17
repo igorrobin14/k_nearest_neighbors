@@ -70,6 +70,7 @@ int main(void)
     double *supports = NULL;
 
     count_files_in_subfolders_and_nb_samples(&files_in_subfolders, flower_folder_paths, &nb_samples);
+
     allocate_file_paths(&files_in_subfolders, &all_image_paths);
     fill_all_image_paths(&all_image_paths, flower_folder_paths);
 
@@ -84,7 +85,36 @@ int main(void)
     allocate_is_right_class(&is_right_class, nb_test_samples);
 
     allocate_points_data(&points_data, nb_train_samples, nb_test_samples);
-    compute_points_data(points_data, nb_train_samples, nb_test_samples, &train_image_array, &test_image_array, weighted_knn, m, p);
+    
+    printf("nb test samples: %d\n", nb_test_samples);
+
+    thread_data_t part_indexes[NB_THREADS];
+    pthread_t threads[NB_THREADS];
+
+    for (int i = 0; i < NB_THREADS; i++)
+    {
+        part_indexes[i].start_index = i * (nb_test_samples / NB_THREADS);
+        part_indexes[i].end_index = (i + 1) * (nb_test_samples / NB_THREADS);
+        part_indexes[i].points_data = points_data;
+        part_indexes[i].nb_train_samples = nb_train_samples;
+        part_indexes[i].samples_test = &test_image_array;
+        part_indexes[i].samples_train = &train_image_array;
+        part_indexes[i].m = m;
+        part_indexes[i].p = p;
+        part_indexes[i].weighted_knn = weighted_knn;
+    }
+
+    for (int i = 0; i < NB_THREADS; i++)
+    {
+        pthread_create(&threads[i], NULL, process_part, (void *)&part_indexes[i]);
+    }
+
+    for (int i = 0; i < NB_THREADS; i++)
+    {
+        pthread_join(threads[i], NULL);
+    }
+
+    //compute_points_data(points_data, nb_train_samples, nb_test_samples, &train_image_array, &test_image_array, weighted_knn, m, p);
 
     allocate_knns(&k_nearest_neighbors, k, nb_test_samples);
     isolate_knns(k_nearest_neighbors, k, nb_test_samples, points_data);
