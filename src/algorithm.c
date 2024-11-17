@@ -32,7 +32,7 @@ void *process_part(void *arg)
             points_data[i][j].index = j;
             weighted_knn == true ? (points_data[i][j].weight = 1.0 / points_data[i][j].distance) : (points_data[i][j].weight = 1.0);
         }
-        printf("i: %d\n", i);
+        // printf("i: %d\n", i);
 
         qsort(points_data[i], nb_train_samples, sizeof(point_data_t), compare_samples);
     }

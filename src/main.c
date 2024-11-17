@@ -141,7 +141,8 @@ int main(void)
 
     clock_t end_time = clock();
 
-    printf("Execution time: %.2lf seconds\n", (double) (end_time - start_time) / (double) CLOCKS_PER_SEC);
+    // Check is execution time measure is correct
+    printf("Execution time: %.2lf seconds\n", (double) (end_time - start_time) / ((double) CLOCKS_PER_SEC * NB_THREADS));
 
     return 0;
 }
