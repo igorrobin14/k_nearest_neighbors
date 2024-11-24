@@ -16,14 +16,13 @@
 
 int main(void)
 {
-    // clock_t start_time = clock();
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC, &start);
 
     int k = 10;
     bool weighted_knn = false;
 
-    metric m = euclidean_distance;
+    metric m = minkowski_distance;
     double p = 2;
 
     unsigned int seed = time(NULL);
@@ -116,6 +115,9 @@ int main(void)
         part_indexes[i].weighted_knn = weighted_knn;
     }
 
+    struct timespec start_compute_distances, end_compute_distances;
+    clock_gettime(CLOCK_MONOTONIC, &start_compute_distances);
+
     for (int i = 0; i < NB_THREADS; i++)
     {
         pthread_create(&threads[i], NULL, process_part, (void *)&part_indexes[i]);
@@ -127,6 +129,14 @@ int main(void)
     }
 
     compute_points_data_rest(points_data, nb_train_samples, nb_test_samples, &train_image_array, &test_image_array, weighted_knn, m, p);
+
+    clock_gettime(CLOCK_MONOTONIC, &end_compute_distances);
+
+    double elapsed_compute_distances = (end_compute_distances.tv_sec - start_compute_distances.tv_sec) + (end_compute_distances.tv_nsec - start_compute_distances.tv_nsec) / 1e9;
+
+    // Check is execution time measure is correct
+    printf("Execution time to compute all distances: %.2f seconds\n", elapsed_compute_distances);
+
     /**
      * End of multithreaded version
      */

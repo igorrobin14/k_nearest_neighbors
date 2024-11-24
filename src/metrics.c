@@ -12,7 +12,7 @@
 double euclidean_distance(raw_image_t * a, raw_image_t * b, double p)
 {
     double sum_squares = 0;
-    p = 2;
+    //p = 2;
     for (int i = 0; i < RESIZED_IMG_SIZE * RESIZED_IMG_SIZE * NB_CHANNELS; i++)
     {
         sum_squares += pow(a->image_data[i] - b->image_data[i], 2);
@@ -39,7 +39,7 @@ double minkowski_distance(raw_image_t * a, raw_image_t * b, double p)
     for (int i = 0; i < RESIZED_IMG_SIZE * RESIZED_IMG_SIZE * NB_CHANNELS; i++)
     {
         sum += pow(fabs(a->image_data[i] - b->image_data[i]), p);
-    }    
+    }
 
     return pow(sum, (1.0 / p));
 }
