@@ -23,7 +23,7 @@ int main(void)
     int k = 10;
     bool weighted_knn = false;
 
-    metric m = minkowski_distance;//euclidean_distance;
+    metric m = euclidean_distance;
     double p = 3;
 
     unsigned int seed = time(NULL);

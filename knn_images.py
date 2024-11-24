@@ -90,7 +90,7 @@ x_test_normalized = x_test #/255
 # On applique la methode des k-NN (on entraine le modele)
 n_voisins = 10
 #metrique = 'euclidian'
-knn = KNeighborsClassifier(n_neighbors=n_voisins, metric='minkowski', p=3, n_jobs=26)
+knn = KNeighborsClassifier(n_neighbors=n_voisins, metric='euclidean', n_jobs=26)
 
 # On entraine le modele
 knn.fit(x_train_normalized, y_train)
