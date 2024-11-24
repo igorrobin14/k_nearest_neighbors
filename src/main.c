@@ -24,7 +24,7 @@ int main(void)
     bool weighted_knn = false;
 
     metric m = euclidean_distance;
-    double p = 3;
+    double p = 2;
 
     unsigned int seed = time(NULL);
 
@@ -91,6 +91,7 @@ int main(void)
     
     printf("nb test samples: %d\n", nb_test_samples);
 
+    
     thread_data_t part_indexes[NB_THREADS];
     pthread_t threads[NB_THREADS];
 
@@ -116,6 +117,9 @@ int main(void)
     {
         pthread_join(threads[i], NULL);
     }
+
+    compute_points_data_rest(points_data, nb_train_samples, nb_test_samples, &train_image_array, &test_image_array, weighted_knn, m, p);
+    
 
     //compute_points_data(points_data, nb_train_samples, nb_test_samples, &train_image_array, &test_image_array, weighted_knn, m, p);
 

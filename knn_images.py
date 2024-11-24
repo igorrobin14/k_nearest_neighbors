@@ -5,7 +5,7 @@ import PIL
 import cv2
 import pathlib
 import matplotlib.pyplot as plt
-from random import shuffle
+import random
 
 import time
 
@@ -17,6 +17,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report, ConfusionMatrixDisplay, confusion_matrix, accuracy_score
 
 start_time = time.time()
+
+random.seed(14)
 
 dataset_url = "flowers/train"
 datadir = pathlib.Path(dataset_url)
@@ -62,7 +64,7 @@ print("Il y a", y_flowers.shape[0], "images en tout")
 
 # On melange les images et les labels dans un ordre aleatoire pour les presenter comme ceci au modele
 ind_list = [i for i in range(x_flowers.shape[0])]
-shuffle(ind_list)
+random.shuffle(ind_list)
 x_shuffled = x_flowers[ind_list,:]
 y_shuffled = y_flowers[ind_list]
 
@@ -70,15 +72,15 @@ y_shuffled = y_flowers[ind_list]
 file_name = "shuffled_indexes.txt"
 
 # Write to the file (not to be done when comparing performance between C and Python)
-# with open(file_name, "w") as file:
-#     file.write(f"{len(ind_list)} ")  # Write the size of the array
-#    file.write(" ".join(map(str, ind_list)))  # Write the array elements separated by space
+with open(file_name, "w") as file:
+    file.write(f"{len(ind_list)} ")  # Write the size of the array
+    file.write(" ".join(map(str, ind_list)))  # Write the array elements separated by space
 
-# print(f"Data written to {file_name}")
+print(f"Data written to {file_name}")
 
 # Separation des donnees en une partie entrainement et une partie test
 taille_test = 0.2
-x_train, x_test, y_train, y_test = train_test_split(x_shuffled, y_shuffled, test_size=taille_test, stratify=y_shuffled)
+x_train, x_test, y_train, y_test = train_test_split(x_shuffled, y_shuffled, test_size=taille_test, stratify=y_shuffled, random_state=14)
 
 print("Nombre de fleurs dans la partie test :", y_test.shape[0])
 print("Nombre de fleurs dans la partie entrainement :", y_train.shape[0])
@@ -90,7 +92,7 @@ x_test_normalized = x_test #/255
 # On applique la methode des k-NN (on entraine le modele)
 n_voisins = 10
 #metrique = 'euclidian'
-knn = KNeighborsClassifier(n_neighbors=n_voisins, metric='euclidean', n_jobs=26)
+knn = KNeighborsClassifier(n_neighbors=n_voisins, metric='euclidean', algorithm='brute', n_jobs=26)
 
 # On entraine le modele
 knn.fit(x_train_normalized, y_train)

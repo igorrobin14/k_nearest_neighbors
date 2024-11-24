@@ -38,7 +38,7 @@ void *process_part(void *arg)
     }
 }
 
-/*
+
 void compute_points_data(point_data_t **points_data, int nb_train_samples, int nb_test_samples, raw_image_t **samples_train, raw_image_t **samples_test, bool weighted_knn, metric m, double p)
 {
     for (int i = 0; i < nb_test_samples; i++)
@@ -49,12 +49,27 @@ void compute_points_data(point_data_t **points_data, int nb_train_samples, int n
             points_data[i][j].index = j;
             weighted_knn == true ? (points_data[i][j].weight = 1.0 / points_data[i][j].distance) : (points_data[i][j].weight = 1.0);
         }
-        printf("i: %d\n", i);
+        // printf("i: %d\n", i);
 
         qsort(points_data[i], nb_train_samples, sizeof(point_data_t), compare_samples);
     }
 }
-*/
+
+void compute_points_data_rest(point_data_t **points_data, int nb_train_samples, int nb_test_samples, raw_image_t **samples_train, raw_image_t **samples_test, bool weighted_knn, metric m, double p)
+{
+    for (int i = nb_test_samples - (nb_test_samples % NB_THREADS); i < nb_test_samples; i++)
+    {
+        for (int j = 0; j < nb_train_samples; j++)
+        {
+            points_data[i][j].distance = m(&(*samples_train)[j], &(*samples_test)[i], p);
+            points_data[i][j].index = j;
+            weighted_knn == true ? (points_data[i][j].weight = 1.0 / points_data[i][j].distance) : (points_data[i][j].weight = 1.0);
+        }
+        // printf("i: %d\n", i);
+
+        qsort(points_data[i], nb_train_samples, sizeof(point_data_t), compare_samples);
+    }
+}
 
 int compare_samples(const void *a, const void *b)
 {
