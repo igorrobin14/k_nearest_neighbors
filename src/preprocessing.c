@@ -200,13 +200,13 @@ void shuffle_from_index_list(raw_image_t *samples, int nb_samples)
     else
     {
         int index_array_size;
-        fscanf(fp, "%d", &index_array_size);
+        int result = fscanf(fp, "%d", &index_array_size);
 
         int * index_array = (int *) malloc(index_array_size * sizeof(int));
 
         for (int i = 0; i < index_array_size; i++)
         {
-            fscanf(fp, "%d", &index_array[i]);
+            result = fscanf(fp, "%d", &index_array[i]);
         }
 
         raw_image_t * new_sample_array = (raw_image_t *) calloc(nb_samples, sizeof(raw_image_t));

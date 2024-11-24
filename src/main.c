@@ -80,8 +80,14 @@ int main(void)
     resize_all_images(&image_array, nb_samples, &files_in_subfolders, &resized_image_array);
     
     bind_image_to_class(class_labels, files_in_subfolders, &resized_image_array);
+
+    /**
+     * @brief Here, either a random shuffle can be used for the images or a deterministic shuffle can be applied (a .txt file with the indexes is read)
+     * Uncomment or comment the desired version
+     */
     //random_shuffle(resized_image_array, nb_samples, seed);
     shuffle_from_index_list(resized_image_array, nb_samples);
+
     train_test_split(test_size, nb_samples, &train_image_array, &test_image_array, &resized_image_array, &nb_test_samples, &nb_train_samples);
 
     allocate_predicted_classes(&predictions, nb_test_samples);
@@ -91,7 +97,9 @@ int main(void)
     
     printf("nb test samples: %d\n", nb_test_samples);
 
-    
+    /**
+     * @brief For multithreaded version
+     */
     thread_data_t part_indexes[NB_THREADS];
     pthread_t threads[NB_THREADS];
 
@@ -119,8 +127,13 @@ int main(void)
     }
 
     compute_points_data_rest(points_data, nb_train_samples, nb_test_samples, &train_image_array, &test_image_array, weighted_knn, m, p);
+    /**
+     * End of multithreaded version
+     */
     
-
+    /***
+     * @brief To uncomment if using single threaded version or NB_THREADS can also be put to 1
+     */
     //compute_points_data(points_data, nb_train_samples, nb_test_samples, &train_image_array, &test_image_array, weighted_knn, m, p);
 
     allocate_knns(&k_nearest_neighbors, k, nb_test_samples);
@@ -145,8 +158,6 @@ int main(void)
 
     free_data(&points_data, &k_nearest_neighbors, &votes, &counts, &ans, &image_array, &resized_image_array, &train_image_array, &test_image_array, &files_in_subfolders, &predictions, &is_right_class, &all_image_paths, k, nb_test_samples);
     free_results(&true_positives, &false_positives, &false_negatives, &r);
-
-    // clock_t end_time = clock();
 
     clock_gettime(CLOCK_MONOTONIC, &end);
 
