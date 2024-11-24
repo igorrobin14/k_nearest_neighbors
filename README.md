@@ -27,20 +27,6 @@ To summarize, the algorithm works like this :
 positives, false positives and false negatives
 ```
 
-## How to use it ?
-- Clone the repository
-- Go on Kaggle.com and download the flowers dataset used here, the link is here: https://www.kaggle.com/datasets/imsparsh/flowers-dataset
-- Extract the .zip archive, go inside it and put the "flowers" folder at the root of this repository
-- Install CMake, installation instructions can be found here: https://cmake.org
-- Run the following commands at the root of the repository:
-```
-mkdir build
-cd build
-cmake ..
-make launch
-```
-- After waiting a few seconds until processing ends, you should be able to see the results in the terminal
-
 ## What can you do to experiment ?
 - You can change the metric used for computing distances: the available ones are Manhattan, euclidean and Minkowski (a high p order can result in long computation)
 - You can change the p order for the Minkowski metric
@@ -52,13 +38,16 @@ make launch
 - The idea would be to implement what is available in the KNeighborsClassifier object in scikit-learn, so even to implement the Ball-Tree or KD-Tree search for the k nearest neighbors
 - The program still being in development, I would like to add a menu for choosing the metric, the number of neighbors (k), and whether the k-NN algorithm is wieghted or not
 
-## Acknowledgements
-This program uses a single file C library for .jpg image decompression and resizing called stb_resize_image2 (.h) which was written by Jeff Roberts and Jorge L Rodriguez. I want to thank them for putting this library in the public domain and thus letting people use it. The library can be found here on Sean Barrett's GitHub:
-
-https://github.com/nothings/stb/blob/master/stb_image_resize2.h
-
-Finally, I also want to thank Sparsh Gupta, a Kaggler, for providing the flower dataset used here.
-
-Any demand, remark, or desire of contribution regarding this project would be welcomed ! You can send me an email at Igor.ROBIN@etu.isima.fr
+## To do
+- Code all other neighbor search algorithms (ball-tree, kd-tree)
+- Check if the weighted version works
+- Comment the code better
+- Reorganize the files into folders maybe (lib)
+- Maybe reorganize the function into files
+- Simplify the code (less paramters for functions, more structs, make them better)
+- Optimize the algorithms/the code
+- Maybe make a GUI
+- Compare performance with Python
+- Do not forget to test if the results are as expected
 
 
