@@ -9,6 +9,7 @@
 #include <math.h>
 #include <time.h>
 #include <pthread.h>
+#include <unistd.h>
 
 #include <jpeglib.h>
 #include <jerror.h>
@@ -16,7 +17,7 @@
 #define _USE_MISC
 #include <dirent.h>
 
-#define NB_THREADS 10
+#define NB_THREADS 26
 
 /**
  * @brief The total number of classes

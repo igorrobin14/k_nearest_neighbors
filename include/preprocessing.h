@@ -72,4 +72,6 @@ void random_shuffle(raw_image_t *samples, int nb_samples, unsigned int seed);
  */
 void train_test_split(double test_size, int nb_samples, raw_image_t **train_image_array, raw_image_t **test_image_array, raw_image_t **resized_image_array, int *nb_test_samples, int *nb_train_samples);
 
+void shuffle_from_index_list(raw_image_t *samples, int nb_samples);
+
 #endif

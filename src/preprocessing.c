@@ -184,3 +184,49 @@ void save_jpeg_image_file(raw_image_t *image, char *file_path)
         printf("Error opening file %s for writing\n", file_path);
     }
 }
+
+void shuffle_from_index_list(raw_image_t *samples, int nb_samples)
+{
+    const char * file_name = "../shuffled_indexes.txt";
+
+    // printf("Nb samples: %d\n", nb_samples);
+
+    FILE * fp = fopen(file_name, "r");
+
+    if (fp == NULL)
+    {
+        printf("Error opening file\n");
+    }
+    else
+    {
+        int index_array_size;
+        fscanf(fp, "%d", &index_array_size);
+
+        int * index_array = (int *) malloc(index_array_size * sizeof(int));
+
+        for (int i = 0; i < index_array_size; i++)
+        {
+            fscanf(fp, "%d", &index_array[i]);
+        }
+
+        raw_image_t * new_sample_array = (raw_image_t *) calloc(nb_samples, sizeof(raw_image_t));
+
+        for (int i = 0; i < index_array_size; i++)
+        {
+            memcpy(&new_sample_array[i], &samples[index_array[i]], sizeof(raw_image_t));
+        }
+
+        for (int i = 0; i < nb_samples; i++)
+        {
+            memcpy(&samples[i], &new_sample_array[i], sizeof(raw_image_t));
+            // printf("%d ", samples[i].image_data[42]);
+        }
+
+        // printf("Here\n");
+
+        fclose(fp);
+
+
+
+    }
+}
