@@ -73,7 +73,7 @@ point_data_t;
 /**
  * @typedef A metric
  */
-typedef double (*metric) (raw_image_t *, raw_image_t *, double);
+typedef double (*metric) (raw_image_t *, raw_image_t *, int);
 
 typedef struct thread_data
 {

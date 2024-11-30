@@ -19,7 +19,7 @@
  * @param p The order of the Mikowski metric (ignored is this case)
  * @return The computed euclidean distance
  */
-double euclidean_distance(raw_image_t *a, raw_image_t *b, double p);
+double euclidean_distance(raw_image_t *a, raw_image_t *b, int p);
 
 /**
  * @brief Manhattan distance between two samples also known as city-block distance (order 1 Minkowski distance)
@@ -29,7 +29,7 @@ double euclidean_distance(raw_image_t *a, raw_image_t *b, double p);
  * @param p The order of the Minkowski metric (ignored in this case)
  * @return The computed Manhattan distance 
  */
-double manhattan_distance(raw_image_t * a, raw_image_t *b, double p);
+double manhattan_distance(raw_image_t * a, raw_image_t *b, int p);
 
 /**
  * @brief Minkowski distance between two samples
@@ -39,6 +39,6 @@ double manhattan_distance(raw_image_t * a, raw_image_t *b, double p);
  * @param p The order of the Minkowski distance
  * @return The computer distance
  */
-double minkowski_distance(raw_image_t * a, raw_image_t * b, double p);
+double minkowski_distance(raw_image_t * a, raw_image_t * b, int p);
 
 #endif
