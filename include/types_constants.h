@@ -59,6 +59,21 @@ typedef struct raw_image
 }
 raw_image_t;
 
+typedef struct dataset_t
+{
+    char *class_labels[NB_CLASSES];
+    char *image_folder_paths[NB_CLASSES]; //flower_folder_paths
+    char ***all_samples_paths; //flower folder paths
+    int *image_folder_sizes; // files in subfolders
+    int number_of_samples; // nb_samples
+    double test_samples_ratio; // test_size
+    int number_of_test_samples; // nb_test_samples
+    int number_of_train_samples; // nb_train_samples
+    
+
+}
+dataset_t;
+
 /**
  * @struct For each train sample, its distance, weight and index with respect to the currently processed test image
  */

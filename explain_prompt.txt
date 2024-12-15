@@ -1,0 +1,7 @@
+Could you please look at all these algorithms used for ball tree construction and traversing (written in Eiffel language)
+and tell what the letters (name of variables) you think are refering to. I don't want you to give me the corresponding code in another more modern language
+and I would like you to explain how these algorithms work together to perform a nearest neighbor search query.
+Moreover, you should know maybe some of the instruction are partially incorrect (I hope not), so there is maybe a missing semicolon or letter somewhere
+and you should also take into account the comment in the code
+Finally, I know a 'BALL' object consists of a vector 'ctr' which holds the center of the ball and a real value 'r' containing the radius of the ball. 'BLT_ND' objects
+consist of a BALL 'bl', and pointers 'par', 'lt', 'rt' to the node's parents and children. 'BALL_TREE' objects have a pointer 'tree' to the underlying tree and a variety of other slots to enhance retrievals (such as local priority queues and caches: by the way, what are these ?)

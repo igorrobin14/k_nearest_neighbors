@@ -1,0 +1,115 @@
+select_on_coord (c, k, li, ui: INTEGER) is
+	
+	-- Move elements around between li and ui, so that the k-th element ctr is >= those below, 
+	-- <= those above, in the coordinate c
+	
+	local l, u, r, m, i:INTEGER;
+	t, s:T;
+	
+	do
+	
+		from l := li; u := ui until not (l < u)
+		
+		loop
+		
+			r := md.integer_mg_md(l, u);
+			t := get(r);
+			set(r, get(l));
+			set(l, t);
+			m := l
+			
+			from i:= l + 1 until i > u 
+			
+			loop
+				
+				if get(i).ctr.get(c) < t.get(c) then
+				
+				m := m + 1
+				s := ge(m);
+				set(m, get(i));
+				set(i, s);
+				
+				end
+			
+				i := i + 1;
+				
+			end;
+		
+		s := get(l);
+		set(l, get(m));
+		set(m, s);
+		
+		if m <= k then l := m + 1 end;
+		
+		if m >= k then u := m - 1 end;
+		
+		end;
+			
+	end;
+	
+build_ball_tree_for_range(l, u: INTEGER): BLT_ND is
+	
+	-- Build a ball-tree for the balls in the range [l, u] of bls
+	
+	local c, m: INTEGER;
+	bl: BALL;
+	
+	do
+	
+		if u = l then -- Make a leaf
+		
+			Result.Create;
+			Result.set_bl(bls.get(u));
+			
+		else
+		
+			c := bls.most_spread_coord(l, u);
+			m := int_div(l + u), 2);
+			bls.select_on_coord(c, m, l, u); -- split left and right
+			Result.create;
+			Result.set_rt(build_bit_for_rane(m + 1));
+			Result.rt.set_par(Result); -- do right side
+			bl.Create(bls.get(0).dim);
+			bl.to_bound_balls(Result.lt.bl, Result.rt.bl);
+			Result.set_bl(bl); -- fill in ball
+			
+		end;
+		
+	end;
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		

@@ -6,8 +6,8 @@
  * @date 2024-04-18
  */
 
-#ifndef ALGORITHM_H
-#define ALGORITHM_H
+#ifndef BRUTE_H
+#define BRUTE_H
 
 #include "types_constants.h"
 

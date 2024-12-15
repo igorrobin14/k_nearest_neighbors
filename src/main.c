@@ -7,7 +7,7 @@
  * @date 2024-04-14
  */
 
-#include "algorithm.h"
+#include "brute.h"
 #include "allocation.h"
 #include "metrics.h"
 #include "preprocessing.h"
@@ -31,11 +31,11 @@ int main(void)
 
     char *flower_folder_paths[NB_CLASSES] = 
     {
-        "../flowers/train/daisy/", 
-        "../flowers/train/dandelion/", 
-        "../flowers/train/rose/", 
-        "../flowers/train/sunflower/", 
-        "../flowers/train/tulip/"
+        "../flowers/daisy/", 
+        "../flowers/dandelion/", 
+        "../flowers/rose/", 
+        "../flowers/sunflower/", 
+        "../flowers/tulip/"
     };
 
     char ***all_image_paths = NULL; 

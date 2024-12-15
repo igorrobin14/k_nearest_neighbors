@@ -6,7 +6,7 @@
  * @date 2024-04-18
  */
 
-#include "algorithm.h"
+#include "brute.h"
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 
 void *process_part(void *arg)
