@@ -16,19 +16,32 @@
 
 int main(void)
 {
-    struct timespec start, end;
+    struct timespec start;
+    struct timespec end;
     clock_gettime(CLOCK_MONOTONIC, &start);
 
-    int k = 10;
-    bool weighted_knn = false;
+    //int k = 10;
+    //bool weighted_knn = false;
 
-    metric m = minkowski_distance;
-    int p = 3;
+    //metric m = minkowski_distance;
+    //int p = 3;
 
     unsigned int seed = time(NULL);
 
-    char *class_labels[NB_CLASSES] = {"daisy", "dandelion", "rose", "sunflower", "tulip"};
+    // char * class_labels[NB_CLASSES] = {"daisy", "dandelion", "rose", "sunflower", "tulip"};
 
+    dataset_t initial_dataset;
+    dataset_t processed_dataset;
+
+    init_data_location(&initial_dataset);
+    count_files_in_main_folder(&initial_dataset);
+    initial_dataset.images = alloc_array(image_t, initial_dataset.nb_samples);
+    set_all_image_paths(&initial_dataset);
+
+    load_all_images(&initial_dataset);
+    resize_all_images(&initial_dataset, &processed_dataset);
+
+    /*
     char *flower_folder_paths[NB_CLASSES] = 
     {
         "../flowers/daisy/", 
@@ -37,23 +50,24 @@ int main(void)
         "../flowers/sunflower/", 
         "../flowers/tulip/"
     };
+    */
 
-    char ***all_image_paths = NULL; 
+    //char ***all_image_paths = NULL; 
  
-    int *files_in_subfolders = NULL;
-    int nb_samples = 0;
+    //int *files_in_subfolders = NULL;
+    //int nb_samples = 0;
 
-    double test_size = 0.2;
-    int nb_test_samples = 0;
-    int nb_train_samples = 0;
+    //double test_size = 0.2;
+    //int nb_test_samples = 0;
+    //int nb_train_samples = 0;
 
-    raw_image_t *image_array = NULL;
-    raw_image_t *resized_image_array = NULL;
-    raw_image_t *test_image_array = NULL;
-    raw_image_t *train_image_array = NULL;
+    //raw_image_t *image_array = NULL;
+    //raw_image_t *resized_image_array = NULL;
+    //raw_image_t *test_image_array = NULL;
+    //raw_image_t *train_image_array = NULL;
 
-    point_data_t **points_data = NULL;
-    point_data_t **k_nearest_neighbors = NULL;
+    //point_data_t **points_data = NULL;
+    //point_data_t **k_nearest_neighbors = NULL;
 
     char ***votes = NULL;
     double **counts = NULL;
@@ -70,38 +84,39 @@ int main(void)
     double *false_negatives = NULL;
     double *supports = NULL;
 
-    count_files_in_subfolders_and_nb_samples(&files_in_subfolders, flower_folder_paths, &nb_samples);
+    //count_files_in_subfolders_and_nb_samples(&files_in_subfolders, flower_folder_paths, &nb_samples);
 
-    allocate_file_paths(&files_in_subfolders, &all_image_paths);
-    fill_all_image_paths(&all_image_paths, flower_folder_paths);
+    //allocate_file_paths(&files_in_subfolders, &all_image_paths);
+    //fill_all_image_paths(&all_image_paths, flower_folder_paths);
 
-    allocate_all_images(&image_array, nb_samples, &files_in_subfolders, &all_image_paths);
-    resize_all_images(&image_array, nb_samples, &files_in_subfolders, &resized_image_array);
+    //allocate_all_images(&image_array, nb_samples, &files_in_subfolders, &all_image_paths);
+    //resize_all_images(&image_array, nb_samples, &files_in_subfolders, &resized_image_array);
     
-    bind_image_to_class(class_labels, files_in_subfolders, &resized_image_array);
+    //bind_image_to_class(class_labels, files_in_subfolders, &resized_image_array);
 
     /**
      * @brief Here, either a random shuffle can be used for the images or a deterministic shuffle can be applied (a .txt file with the indexes is read)
      * Uncomment or comment the desired version
      */
-    //random_shuffle(resized_image_array, nb_samples, seed);
-    shuffle_from_index_list(resized_image_array, nb_samples);
+    ////andom_shuffle(resized_image_array, nb_samples, seed);
+    //shuffle_from_index_list(resized_image_array, nb_samples);
 
-    train_test_split(test_size, nb_samples, &train_image_array, &test_image_array, &resized_image_array, &nb_test_samples, &nb_train_samples);
+    //train_test_split(test_size, nb_samples, &train_image_array, &test_image_array, &resized_image_array, &nb_test_samples, &nb_train_samples);
 
-    allocate_predicted_classes(&predictions, nb_test_samples);
-    allocate_is_right_class(&is_right_class, nb_test_samples);
+    //allocate_predicted_classes(&predictions, nb_test_samples);
+    //allocate_is_right_class(&is_right_class, nb_test_samples);
 
-    allocate_points_data(&points_data, nb_train_samples, nb_test_samples);
+    //allocate_points_data(&points_data, nb_train_samples, nb_test_samples);
     
-    printf("nb test samples: %d\n", nb_test_samples);
+    //printf("nb test samples: %d\n", nb_test_samples);
 
     /**
      * @brief For multithreaded version
      */
-    thread_data_t part_indexes[NB_THREADS];
-    pthread_t threads[NB_THREADS];
+    //thread_data_t part_indexes[NB_THREADS];
+    //pthread_t threads[NB_THREADS];
 
+    /*
     for (int i = 0; i < NB_THREADS; i++)
     {
         part_indexes[i].start_index = i * (nb_test_samples / NB_THREADS);
@@ -136,6 +151,7 @@ int main(void)
 
     // Check is execution time measure is correct
     printf("Execution time to compute all distances: %.2f seconds\n", elapsed_compute_distances);
+    */
 
     /**
      * End of multithreaded version
@@ -146,6 +162,7 @@ int main(void)
      */
     //compute_points_data(points_data, nb_train_samples, nb_test_samples, &train_image_array, &test_image_array, weighted_knn, m, p);
 
+/*
     allocate_knns(&k_nearest_neighbors, k, nb_test_samples);
     isolate_knns(k_nearest_neighbors, k, nb_test_samples, points_data);
 
@@ -175,6 +192,7 @@ int main(void)
 
     // Check is execution time measure is correct
     printf("Execution time: %.2f seconds\n", elapsed);
+    */
 
     return 0;
 }

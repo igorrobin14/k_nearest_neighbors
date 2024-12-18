@@ -17,6 +17,7 @@
 #define _USE_MISC
 #include <dirent.h>
 
+
 #define NB_THREADS 26
 
 /**
@@ -30,66 +31,76 @@
 #define MAX_STR_LENGTH 256
 
 /**
- * @brief The size of the resized images
- */
-#define RESIZED_IMG_SIZE 128
-
-/**
- * @brief The number of channels for images (RGB)
- */
-#define NB_CHANNELS 3
-
-/**
  * @brief The quality of .jpg image decompression
  */
 #define IMG_QUALITY 100
 
+#define RESIZED_IMG_SIZE 128
+
+#define NB_CHANNELS 3
+
 /**
  * @struct A structure for images
  */
-typedef struct raw_image
+typedef struct image
 {
     unsigned int num_components;
-    unsigned int width;
     unsigned int height;
-
-    unsigned char *image_data;
-
-    char *class;
+    unsigned int width;
+    unsigned char * pixels;
+    char path[512];
 }
-raw_image_t;
+image_t;
 
-typedef struct dataset_t
+typedef struct folder
 {
-    char *class_labels[NB_CLASSES];
-    char *image_folder_paths[NB_CLASSES]; //flower_folder_paths
-    char ***all_samples_paths; //flower folder paths
-    int *image_folder_sizes; // files in subfolders
-    int number_of_samples; // nb_samples
-    double test_samples_ratio; // test_size
-    int number_of_test_samples; // nb_test_samples
-    int number_of_train_samples; // nb_train_samples
-    
+    char path[MAX_STR_LENGTH];
+    unsigned int nb_files_contained;
+    char ** file_paths;
+}
+folder_t;
 
+typedef struct dataset
+{
+    unsigned int nb_samples;
+    image_t * images;
+    image_t * first_image;
+    image_t * last_image;
+    char main_folder_path[MAX_STR_LENGTH];
+    folder_t folders[NB_CLASSES];
+    char * class_labels[NB_CLASSES];
 }
 dataset_t;
 
-/**
- * @struct For each train sample, its distance, weight and index with respect to the currently processed test image
- */
-typedef struct point_data
+typedef struct thread_info
 {
-    double distance;
-    double weight;
-    int index;
+    unsigned int start_data_index;
+    unsigned int end_data_index;
 }
-point_data_t;
+thread_info_t;
 
-/**
- * @typedef A metric
- */
-typedef double (*metric) (raw_image_t *, raw_image_t *, int);
+typedef struct query_point
+{
+    unsigned char * pixels;
+    double * distances_to_all_points;
+    image_t * k_nearest_neighbors;
+}
+query_point_t;
 
+typedef double (*metric) (image_t *, image_t *, int);
+
+typedef struct knn_classifier
+{
+    metric m;
+    unsigned int p;
+    unsigned int k;
+    // algorithm algo;
+    unsigned int n_jobs;
+    bool weighted;
+}
+knn_classifier_t;
+
+/*
 typedef struct thread_data
 {
     int start_index;
@@ -103,6 +114,7 @@ typedef struct thread_data
     double p;
 }
 thread_data_t;
+*/
 
 /**
  * @struct The results structure
