@@ -27,27 +27,3 @@ To summarize, the algorithm works like this :
 positives, false positives and false negatives
 ```
 
-## What can you do to experiment ?
-- You can change the metric used for computing distances: the available ones are Manhattan, euclidean and Minkowski (a high p order can result in long computation)
-- You can change the p order for the Minkowski metric
-- You can use the weighted version (inverse of distances)
-- You can use a different dataset, but you will have to modify some code because the file structure will be different
-
-## What happens next ?
-- In the future, my goal would be to have more features available is this program, for example by increasing the number of available metrics (like adding cosine similarity)
-- The idea would be to implement what is available in the KNeighborsClassifier object in scikit-learn, so even to implement the Ball-Tree or KD-Tree search for the k nearest neighbors
-- The program still being in development, I would like to add a menu for choosing the metric, the number of neighbors (k), and whether the k-NN algorithm is wieghted or not
-
-## To do
-- Code all other neighbor search algorithms (ball-tree, kd-tree)
-- Check if the weighted version works
-- Comment the code better
-- Reorganize the files into folders maybe (lib)
-- Maybe reorganize the function into files
-- Simplify the code (less paramters for functions, more structs, make them better)
-- Optimize the algorithms/the code
-- Maybe make a GUI
-- Compare performance with Python
-- Do not forget to test if the results are as expected
-
-
