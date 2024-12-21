@@ -49,6 +49,7 @@ typedef struct image
     unsigned int width;
     unsigned char * pixels;
     char path[512];
+    char class_label[MAX_STR_LENGTH];
 }
 image_t;
 
@@ -64,8 +65,9 @@ typedef struct dataset
 {
     unsigned int nb_samples;
     image_t * images;
-    image_t * first_image;
-    image_t * last_image;
+    //image_t * first_image;
+    //image_t * last_image;
+    image_t * test_train_separation;
     char main_folder_path[MAX_STR_LENGTH];
     folder_t folders[NB_CLASSES];
     char * class_labels[NB_CLASSES];

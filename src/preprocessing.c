@@ -58,11 +58,11 @@ void count_files_in_main_folder(dataset_t * dataset)
 
 void init_data_location(dataset_t * dataset)
 {
-    dataset->class_labels[0] = "daisy/";
-    dataset->class_labels[1] = "dandelion/";
-    dataset->class_labels[2] = "rose/";
-    dataset->class_labels[3] = "sunflower/";
-    dataset->class_labels[4] = "tulip/";
+    dataset->class_labels[0] = "daisy";
+    dataset->class_labels[1] = "dandelion";
+    dataset->class_labels[2] = "rose";
+    dataset->class_labels[3] = "sunflower";
+    dataset->class_labels[4] = "tulip";
 
     strcpy(dataset->main_folder_path, "../flowers/");
 
@@ -71,6 +71,7 @@ void init_data_location(dataset_t * dataset)
         char path[MAX_STR_LENGTH];
         strcpy(path, dataset->main_folder_path);
         strcat(path, dataset->class_labels[i]);
+        strcat(path, "/");
         strcpy(dataset->folders[i].path, path);
     }
 }
@@ -105,11 +106,26 @@ void set_all_image_paths(dataset_t * dataset)
     }
 }
 
+void map_images_to_class(dataset_t * dataset)
+{
+    unsigned int image_index = 0;
+    for (int i = 0; i < NB_CLASSES; i++)
+    {
+        for (int j = 0; j < dataset->folders[i].nb_files_contained; j++)
+        {
+            strcpy(dataset->images[image_index].class_label, dataset->class_labels[i]);
+            image_index++;
+        }
+    }
+}
+
 void load_all_images(dataset_t * dataset)
 {
     for (int i = 0; i < dataset->nb_samples; i++)
     {
         load_jpeg_image_file(&dataset->images[i]);
+
+        //printf("50th pixel, %d\n", dataset->images[i].pixels[49]);
     }
 }
 
@@ -128,7 +144,7 @@ void load_jpeg_image_file(image_t * loaded_image)
     loaded_image->pixels = NULL;
 
     unsigned long int new_image_width, new_image_height;
-    int num_components;
+    int new_image_num_components;
 
     unsigned long int dw_buffer_bytes;
     unsigned char * new_image_data;
@@ -147,13 +163,13 @@ void load_jpeg_image_file(image_t * loaded_image)
         jpeg_start_decompress(&info);
         new_image_width = info.output_width;
         new_image_height = info.output_height;
-        num_components = info.num_components;
+        new_image_num_components = info.num_components;
 
         dw_buffer_bytes = new_image_width * new_image_height * NB_CHANNELS;
         //new_image_data = (unsigned char *) malloc(dw_buffer_bytes * sizeof(unsigned char));
         new_image_data = alloc_array(unsigned char, dw_buffer_bytes);
 
-        loaded_image->num_components = num_components;
+        loaded_image->num_components = new_image_num_components;
         loaded_image->width = new_image_width;
         loaded_image->height = new_image_height;
         loaded_image->pixels = new_image_data;
@@ -185,6 +201,13 @@ void resize_all_images(dataset_t * initial_dataset, dataset_t * processed_datase
         processed_dataset->images[i].pixels = alloc_array(unsigned char, RESIZED_IMG_SIZE * RESIZED_IMG_SIZE * NB_CHANNELS);
         stbir_resize_uint8_linear(initial_dataset->images[i].pixels, initial_dataset->images[i].width, initial_dataset->images[i].height, 0, processed_dataset->images[i].pixels, RESIZED_IMG_SIZE, RESIZED_IMG_SIZE, 0, STBIR_RGB);
     }
+
+    processed_dataset->nb_samples = initial_dataset->nb_samples;
+}
+
+void train_test_split(dataset_t * dataset, double test_size)
+{
+    dataset->test_train_separation = &(dataset->images[(int) ((double) dataset->nb_samples * test_size)]);
 }
 
 // void bind_image_to_class(char *class_labels[], int *files_in_subfolders, raw_image_t **resized_image_array)
@@ -283,48 +306,40 @@ void resize_all_images(dataset_t * initial_dataset, dataset_t * processed_datase
 //     }
 // }
 
-// void shuffle_from_index_list(raw_image_t *samples, int nb_samples)
-// {
-//     const char * file_name = "../shuffled_indexes.txt";
+void shuffle_from_index_list(dataset_t * dataset)
+{
+    const char * file_name = "../shuffled_indexes.txt";
 
-//     // printf("Nb samples: %d\n", nb_samples);
+    FILE * fp = fopen(file_name, "r");
 
-//     FILE * fp = fopen(file_name, "r");
+    if (fp == NULL)
+    {
+        printf("Error opening file\n");
+    }
+    else
+    {
+        int index_array_size;
+        int result = fscanf(fp, "%d", &index_array_size);
 
-//     if (fp == NULL)
-//     {
-//         printf("Error opening file\n");
-//     }
-//     else
-//     {
-//         int index_array_size;
-//         int result = fscanf(fp, "%d", &index_array_size);
+        int * index_array = alloc_array(int, index_array_size);
 
-//         int * index_array = (int *) malloc(index_array_size * sizeof(int));
+        for (int i = 0; i < index_array_size; i++)
+        {
+            result = fscanf(fp, "%d", &index_array[i]);
+        }
 
-//         for (int i = 0; i < index_array_size; i++)
-//         {
-//             result = fscanf(fp, "%d", &index_array[i]);
-//         }
+        image_t * new_sample_array = alloc_array(image_t, dataset->nb_samples);
 
-//         raw_image_t * new_sample_array = (raw_image_t *) calloc(nb_samples, sizeof(raw_image_t));
+        for (int i = 0; i < index_array_size; i++)
+        {
+            memcpy(&new_sample_array[i], &dataset->images[index_array[i]], sizeof(image_t));
+        }
 
-//         for (int i = 0; i < index_array_size; i++)
-//         {
-//             memcpy(&new_sample_array[i], &samples[index_array[i]], sizeof(raw_image_t));
-//         }
+        for (int i = 0; i < dataset->nb_samples; i++)
+        {
+            memcpy(&dataset->images[i], &new_sample_array[i], sizeof(image_t));
+        }
 
-//         for (int i = 0; i < nb_samples; i++)
-//         {
-//             memcpy(&samples[i], &new_sample_array[i], sizeof(raw_image_t));
-//             // printf("%d ", samples[i].image_data[42]);
-//         }
-
-//         // printf("Here\n");
-
-//         fclose(fp);
-
-
-
-//     }
-// }
+        fclose(fp);
+    }
+}

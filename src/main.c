@@ -20,15 +20,7 @@ int main(void)
     struct timespec end;
     clock_gettime(CLOCK_MONOTONIC, &start);
 
-    //int k = 10;
-    //bool weighted_knn = false;
-
-    //metric m = minkowski_distance;
-    //int p = 3;
-
     unsigned int seed = time(NULL);
-
-    // char * class_labels[NB_CLASSES] = {"daisy", "dandelion", "rose", "sunflower", "tulip"};
 
     dataset_t initial_dataset;
     dataset_t processed_dataset;
@@ -37,9 +29,33 @@ int main(void)
     count_files_in_main_folder(&initial_dataset);
     initial_dataset.images = alloc_array(image_t, initial_dataset.nb_samples);
     set_all_image_paths(&initial_dataset);
+    map_images_to_class(&initial_dataset);
 
     load_all_images(&initial_dataset);
     resize_all_images(&initial_dataset, &processed_dataset);
+
+    shuffle_from_index_list(&processed_dataset);
+
+    // Scikit-learn-like
+    knn_classifier_t knn_classifier = 
+    {
+        // Metric
+        euclidean_distance,
+
+        // Minkowski metric p order
+        2,
+
+        // Number of neighbors (k)
+        10,
+
+        // Number of simultaneous threads (n_jobs)
+        NB_THREADS,
+
+        // Weighted distances ?
+        false,
+    };
+
+    pthread_t threads[NB_THREADS];
 
     /*
     char *flower_folder_paths[NB_CLASSES] = 
@@ -98,7 +114,7 @@ int main(void)
      * @brief Here, either a random shuffle can be used for the images or a deterministic shuffle can be applied (a .txt file with the indexes is read)
      * Uncomment or comment the desired version
      */
-    ////andom_shuffle(resized_image_array, nb_samples, seed);
+    ////random_shuffle(resized_image_array, nb_samples, seed);
     //shuffle_from_index_list(resized_image_array, nb_samples);
 
     //train_test_split(test_size, nb_samples, &train_image_array, &test_image_array, &resized_image_array, &nb_test_samples, &nb_train_samples);

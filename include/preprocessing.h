@@ -42,6 +42,8 @@ void load_all_images(dataset_t * dataset);
 
 void load_jpeg_image_file(image_t * loaded_image);
 
+void map_images_to_class(dataset_t * dataset);
+
 /**
  * @brief Resizes all images contained in the array of images
  * 
@@ -81,8 +83,8 @@ void resize_all_images(dataset_t * initial_dataset, dataset_t * processed_datase
 //  * @param nb_test_samples The total number of test samples
 //  * @param nb_train_samples The total number of training samples
 //  */
-// void train_test_split(double test_size, int nb_samples, raw_image_t **train_image_array, raw_image_t **test_image_array, raw_image_t **resized_image_array, int *nb_test_samples, int *nb_train_samples);
+void train_test_split(dataset_t * dataset, double test_size);
 
-// void shuffle_from_index_list(raw_image_t *samples, int nb_samples);
+void shuffle_from_index_list(dataset_t * dataset);
 
 #endif
