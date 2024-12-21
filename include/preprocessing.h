@@ -54,9 +54,23 @@ void map_images_to_class(dataset_t * dataset);
  */
 void resize_all_images(dataset_t * initial_dataset, dataset_t * processed_dataset);
 
+void allocate_query_point_data(dataset_t * dataset, knn_classifier_t * knn);
+
 void launch_multithreaded_processing(thread_t threads[NB_THREADS], knn_classifier_t * knn_classifier, dataset_t * dataset);
 
 void * process_part(void * arg);
+
+void compute_points_data_rest(dataset_t * dataset, knn_classifier_t * knn);
+
+void isolate_knns(dataset_t * dataset, knn_classifier_t * knn);
+
+int compare_indices(const void * a, const void * b);
+
+//void unmap_test_set_from_label(dataset_t * dataset);
+
+void init_class_stats(dataset_t * initial_dataset, dataset_t * processed_dataset);
+
+void compute_weighted_counts(dataset_t * dataset, knn_classifier_t * knn);
 
 // /**
 //  * @brief Binds each image to its class by putting in the "class" field its class

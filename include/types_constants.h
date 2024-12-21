@@ -14,6 +14,7 @@
 #include <jpeglib.h>
 #include <jerror.h>
 
+
 #define _USE_MISC
 #include <dirent.h>
 
@@ -42,6 +43,25 @@
 /**
  * @struct A structure for images
  */
+struct others_info_t;
+
+typedef struct others_info
+{
+    double * distances_to_other_images;
+    unsigned int * other_images_indices;
+    double * weights;
+    struct image * k_nearest_neighbors;
+    //char label_guess[MAX_STR_LENGTH];
+}
+others_info_t;
+
+typedef struct class_stats
+{
+    char class_label[MAX_STR_LENGTH];
+    double count;
+}
+class_stats_t;
+
 typedef struct image
 {
     unsigned int num_components;
@@ -50,8 +70,13 @@ typedef struct image
     unsigned char * pixels;
     char path[512];
     char class_label[MAX_STR_LENGTH];
+    
+    others_info_t others_info;
+    class_stats_t class_stats[NB_CLASSES];
+    char label_guess[MAX_STR_LENGTH];
 }
 image_t;
+
 
 typedef struct folder
 {
@@ -74,6 +99,7 @@ typedef struct dataset
 }
 dataset_t;
 
+/*
 typedef struct query_point
 {
     unsigned char * pixels;
@@ -81,6 +107,7 @@ typedef struct query_point
     image_t * k_nearest_neighbors;
 }
 query_point_t;
+*/
 
 typedef double (*metric) (image_t *, image_t *, int);
 
@@ -99,8 +126,8 @@ typedef struct thread_data
 {
     dataset_t * dataset;
     knn_classifier_t * knn;
-    image_t * first_processed_image;
-    image_t * last_processed_image;
+    unsigned int first_processed_image_index;
+    unsigned int last_processed_image_index;
 }
 thread_data_t;
 

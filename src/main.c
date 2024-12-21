@@ -36,6 +36,8 @@ int main(void)
 
     shuffle_from_index_list(&processed_dataset);
 
+    train_test_split(&processed_dataset, 0.2);
+
     // Scikit-learn-like
     knn_classifier_t knn_classifier = 
     {
@@ -55,9 +57,20 @@ int main(void)
         false,
     };
 
+    allocate_query_point_data(&processed_dataset, &knn_classifier);
+
     //pthread_t threads[NB_THREADS];
     thread_t threads[NB_THREADS];
     launch_multithreaded_processing(threads, &knn_classifier, &processed_dataset);
+    compute_points_data_rest(&processed_dataset, &knn_classifier);
+
+    isolate_knns(&processed_dataset, &knn_classifier);
+    init_class_stats(&initial_dataset, &processed_dataset);
+
+    compute_weighted_counts(&initial_dataset, &knn_classifier);
+
+    //printf("total nb of samples: %d\n", processed_dataset.nb_samples);
+    //unmap_test_set_from_label(&processed_dataset);
 
     /*
     char *flower_folder_paths[NB_CLASSES] = 
