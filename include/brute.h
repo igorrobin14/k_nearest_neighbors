@@ -1,15 +1,15 @@
-// /**
-//  * @file algorithm.h
-//  * @author Igor Robin (Igor.ROBIN@etu.isima.fr)
-//  * @brief Central functions in the k-NN algorithm
-//  * @version 0.1
-//  * @date 2024-04-18
-//  */
+/**
+ * @file algorithm.h
+ * @author Igor Robin (Igor.ROBIN@etu.isima.fr)
+ * @brief Central functions in the k-NN algorithm
+ * @version 0.1
+ * @date 2024-04-18
+ */
 
-// #ifndef BRUTE_H
-// #define BRUTE_H
+#ifndef BRUTE_H
+#define BRUTE_H
 
-// #include "types_constants.h"
+#include "types_constants.h"
 
 // /**
 //  * @brief Computes for each train sample its distance, weight, and index with respect to the currently processed test image
@@ -27,7 +27,7 @@
 
 // void compute_points_data_rest(point_data_t **points_data, int nb_train_samples, int nb_test_samples, raw_image_t **samples_train, raw_image_t **samples_test, bool weighted_knn, metric m, double p);
 
-// void *process_part(void *arg);
+void *process_part(void *arg);
 
 // /**
 //  * @brief Compares two samples based on their distance
@@ -82,4 +82,4 @@
 //  */
 // void compute_weighted_counts(char ****votes, int k, char *class_labels[], double ***counts, point_data_t ***k_nearest_neighbors, int nb_test_samples);
 
-// #endif
+#endif

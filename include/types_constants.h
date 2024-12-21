@@ -67,19 +67,12 @@ typedef struct dataset
     image_t * images;
     //image_t * first_image;
     //image_t * last_image;
-    image_t * test_train_separation;
+    unsigned int test_train_separation_index;
     char main_folder_path[MAX_STR_LENGTH];
     folder_t folders[NB_CLASSES];
     char * class_labels[NB_CLASSES];
 }
 dataset_t;
-
-typedef struct thread_info
-{
-    unsigned int start_data_index;
-    unsigned int end_data_index;
-}
-thread_info_t;
 
 typedef struct query_point
 {
@@ -101,6 +94,22 @@ typedef struct knn_classifier
     bool weighted;
 }
 knn_classifier_t;
+
+typedef struct thread_data
+{
+    dataset_t * dataset;
+    knn_classifier_t * knn;
+    image_t * first_processed_image;
+    image_t * last_processed_image;
+}
+thread_data_t;
+
+typedef struct thread
+{
+    pthread_t thr;
+    thread_data_t thr_data;
+}
+thread_t;
 
 /*
 typedef struct thread_data

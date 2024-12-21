@@ -55,7 +55,9 @@ int main(void)
         false,
     };
 
-    pthread_t threads[NB_THREADS];
+    //pthread_t threads[NB_THREADS];
+    thread_t threads[NB_THREADS];
+    launch_multithreaded_processing(threads, &knn_classifier, &processed_dataset);
 
     /*
     char *flower_folder_paths[NB_CLASSES] = 

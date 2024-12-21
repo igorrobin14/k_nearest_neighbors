@@ -207,7 +207,28 @@ void resize_all_images(dataset_t * initial_dataset, dataset_t * processed_datase
 
 void train_test_split(dataset_t * dataset, double test_size)
 {
-    dataset->test_train_separation = &(dataset->images[(int) ((double) dataset->nb_samples * test_size)]);
+    dataset->test_train_separation_index = (unsigned int) ((double) dataset->nb_samples * test_size);
+}
+
+void * process_part(void * arg)
+{
+
+}
+
+void launch_multithreaded_processing(thread_t threads[NB_THREADS], knn_classifier_t * knn_classifier, dataset_t * dataset)
+{
+    for (int i = 0; i < NB_THREADS; i++)
+    {
+        threads[i].thr_data.first_processed_image = &(dataset->images[i * (dataset->test_train_separation_index / NB_THREADS)]);
+        threads[i].thr_data.last_processed_image = &(dataset->images[(i + 1) * (dataset->test_train_separation_index / NB_THREADS)]);
+
+        pthread_create(&threads[i].thr, NULL, process_part, (void *)&threads[i].thr_data);
+    }
+
+    for (int i = 0; i < NB_THREADS; i++)
+    {
+        pthread_join(threads[i].thr, NULL);
+    }
 }
 
 // void bind_image_to_class(char *class_labels[], int *files_in_subfolders, raw_image_t **resized_image_array)

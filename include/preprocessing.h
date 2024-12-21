@@ -54,6 +54,10 @@ void map_images_to_class(dataset_t * dataset);
  */
 void resize_all_images(dataset_t * initial_dataset, dataset_t * processed_dataset);
 
+void launch_multithreaded_processing(thread_t threads[NB_THREADS], knn_classifier_t * knn_classifier, dataset_t * dataset);
+
+void * process_part(void * arg);
+
 // /**
 //  * @brief Binds each image to its class by putting in the "class" field its class
 //  * 
