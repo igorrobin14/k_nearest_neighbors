@@ -226,26 +226,29 @@ void allocate_query_point_data(dataset_t * dataset, knn_classifier_t * knn)
     for (int i = 0; i < dataset->test_train_separation_index; i++)
     {
         //printf("i: %d\n", dataset->images[i].pixels[50]);
-        dataset->images[i].others_info.k_nearest_neighbors = alloc_array(image_t, knn->k);
-
         unsigned int nb_train_samples = dataset->nb_samples - dataset->test_train_separation_index;
-        dataset->images[i].others_info.distances_to_other_images = alloc_array(double, nb_train_samples);
-        dataset->images[i].others_info.weights = alloc_array(double, nb_train_samples);
-        dataset->images[i].others_info.other_images_indices = alloc_array(unsigned int, nb_train_samples);
+        dataset->images[i].queries_infos = alloc_array(query_info_t, nb_train_samples);//->k_nearest_neighbors = alloc_array(image_t, knn->k);
+        
+
+        
+        dataset->images[i].k_nearest_neighbors = alloc_array(image_t, knn->k);
+        //dataset->images[i].others_info.distances_to_other_images = alloc_array(double, nb_train_samples);
+        //dataset->images[i].others_info.weights = alloc_array(double, nb_train_samples);
+        //dataset->images[i].others_info.other_images_indices = alloc_array(unsigned int, nb_train_samples);
     }
 }
 
 int compare_indices(const void * a, const void * b)
 {
     int result;
-    const double * p_a = (const double *) a;
-    const double * p_b = (const double *) b;
+    const query_info_t * p_a = (const query_info_t *) a;
+    const query_info_t * p_b = (const query_info_t *) b;
 
-    if (p_a < p_b)
+    if (p_a->distance_to_query_point < p_b->distance_to_query_point)
     {
         result = -1;
     }
-    else if (p_a > p_b)
+    else if (p_a->distance_to_query_point > p_b->distance_to_query_point)
     {
         result = 1;
     }
@@ -266,21 +269,21 @@ void * process_part(void * arg)
         unsigned int others_info_index = 0;
         for (int j = thread_data->dataset->test_train_separation_index; j < thread_data->dataset->nb_samples; j++)
         {
-            thread_data->dataset->images[i].others_info.distances_to_other_images[others_info_index] = thread_data->knn->m(&(thread_data->dataset->images)[j], &(thread_data->dataset->images[i]), thread_data->knn->p);
-            thread_data->dataset->images[i].others_info.other_images_indices[others_info_index] = j;
-            thread_data->knn->weighted == true ? (thread_data->dataset->images[i].others_info.weights[others_info_index] = 1.0 / thread_data->dataset->images[i].others_info.distances_to_other_images[others_info_index]) : (thread_data->dataset->images[i].others_info.weights[others_info_index] = 1.0);
+            thread_data->dataset->images[i].queries_infos[others_info_index].distance_to_query_point = thread_data->knn->m(&(thread_data->dataset->images)[j], &(thread_data->dataset->images[i]), thread_data->knn->p);
+            thread_data->dataset->images[i].queries_infos[others_info_index].index = j;
+            thread_data->knn->weighted == true ? (thread_data->dataset->images[i].queries_infos[others_info_index].weight = 1.0 / thread_data->dataset->images[i].queries_infos[others_info_index].distance_to_query_point) : (thread_data->dataset->images[i].queries_infos[others_info_index].weight = 1.0);
 
             others_info_index++;
         }
 
-        qsort(thread_data->dataset->images[i].others_info.other_images_indices, thread_data->dataset->nb_samples, sizeof(unsigned int), compare_indices);
+        qsort(thread_data->dataset->images[i].queries_infos, others_info_index, sizeof(query_info_t), compare_indices);
 
-        //printf("other image indices for image with index %d\n", i);
-        //for (int k = 0; k < others_info_index; k++)
-        //{
-        //    printf("%d ", thread_data->dataset->images->others_info.other_images_indices[k]);
-        //}
-        //printf("\n");
+        printf("other image indices for image with index %d\n", i);
+        for (int k = 0; k < others_info_index; k++)
+        {
+           printf("%d ", thread_data->dataset->images[i].queries_infos[others_info_index].index);
+        }
+        printf("\n");
     }
 }
 
@@ -291,9 +294,9 @@ void compute_points_data_rest(dataset_t * dataset, knn_classifier_t * knn)
         unsigned int others_info_index = 0;
         for (int j = dataset->test_train_separation_index; j < dataset->nb_samples; j++)
         {
-            dataset->images[i].others_info.distances_to_other_images[others_info_index] = knn->m(&(dataset->images)[j], &(dataset->images[i]), knn->p);
-            dataset->images[i].others_info.other_images_indices[others_info_index] = j;
-            knn->weighted == true ? (dataset->images[i].others_info.weights[others_info_index] = 1.0 / dataset->images[i].others_info.distances_to_other_images[others_info_index]) : (dataset->images[i].others_info.weights[others_info_index] = 1.0);
+            dataset->images[i].queries_infos[j].distance_to_query_point = knn->m(&(dataset->images)[j], &(dataset->images[i]), knn->p);
+            dataset->images[i].queries_infos[j].index= j;
+            knn->weighted == true ? (dataset->images[i].queries_infos[j].weight = 1.0 / dataset->images[i].queries_infos[j].distance_to_query_point) : (dataset->images[i].queries_infos[j].weight = 1.0);
 
             others_info_index++;
         }
@@ -307,8 +310,10 @@ void isolate_knns(dataset_t * dataset, knn_classifier_t * knn)
         for (int j = 0; j < knn->k; j++)
         {
             //printf("dataset->images[i].others_info.other_images_indices[j]: %d\n", dataset->images[i].others_info.other_images_indices[j]);
-            dataset->images[i].others_info.k_nearest_neighbors[j] = dataset->images[dataset->images[i].others_info.other_images_indices[j]];
+            dataset->images[i].k_nearest_neighbors[j] = dataset->images[dataset->images[i].queries_infos[j].index];
             //strcpy(dataset->images[i].others_info.k_nearest_neighbors[j].class_label, dataset->images[dataset->images[i].others_info.other_images_indices[j]].class_label);
+            //printf("neighbor class label: %s\n", dataset->images[i].others_info.k_nearest_neighbors[j].class_label);
+            //
         }
     }
 }
@@ -368,10 +373,10 @@ void compute_weighted_counts(dataset_t * dataset, knn_classifier_t * knn)
             for (int k = 0; k < knn->k; k++)
             {
                 //printf("class label: %s\n", dataset->images[i].others_info.k_nearest_neighbors[k].class_label);
-                if (strcmp(dataset->images[i].others_info.k_nearest_neighbors[k].class_label, dataset->images[i].class_stats[j].class_label) == 0)
+                if (strcmp(dataset->images[i].k_nearest_neighbors[k].class_label, dataset->images[i].class_stats[j].class_label) == 0)
                 //if (strcmp("test", dataset->images[i].class_stats[j].class_label) == 0)
                 {
-                    dataset->images[i].class_stats[j].count += (1.0 * dataset->images[i].others_info.k_nearest_neighbors[k].others_info.weights[k]);
+                    dataset->images[i].class_stats[j].count += (1.0 * dataset->images[i].k_nearest_neighbors[k].queries_infos[k].weight);
                 }
             }
         }

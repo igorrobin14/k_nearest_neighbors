@@ -45,15 +45,15 @@
  */
 struct others_info_t;
 
-typedef struct others_info
+typedef struct query_info
 {
-    double * distances_to_other_images;
-    unsigned int * other_images_indices;
-    double * weights;
-    struct image * k_nearest_neighbors;
+    double distance_to_query_point;
+    unsigned int index;
+    double weight;
+    //struct image * k_nearest_neighbors;
     //char label_guess[MAX_STR_LENGTH];
 }
-others_info_t;
+query_info_t;
 
 typedef struct class_stats
 {
@@ -71,7 +71,8 @@ typedef struct image
     char path[512];
     char class_label[MAX_STR_LENGTH];
     
-    others_info_t others_info;
+    query_info_t * queries_infos;
+    struct image * k_nearest_neighbors;
     class_stats_t class_stats[NB_CLASSES];
     char label_guess[MAX_STR_LENGTH];
 }
