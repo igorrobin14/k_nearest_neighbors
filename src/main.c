@@ -24,7 +24,7 @@ int main(void)
     int k = 10;
     bool weighted_knn = false;
 
-    metric m = minkowski_distance;
+    metric m = euclidean_distance; // minkowski_distance;
     int p = 3;
 
     unsigned int seed = time(NULL);
@@ -33,11 +33,11 @@ int main(void)
 
     char *flower_folder_paths[NB_CLASSES] = 
     {
-        "../flowers/train/daisy/", 
-        "../flowers/train/dandelion/", 
-        "../flowers/train/rose/", 
-        "../flowers/train/sunflower/", 
-        "../flowers/train/tulip/"
+        "../flowers/daisy/", 
+        "../flowers/dandelion/", 
+        "../flowers/rose/", 
+        "../flowers/sunflower/", 
+        "../flowers/tulip/"
     };
 
     char ***all_image_paths = NULL; 
