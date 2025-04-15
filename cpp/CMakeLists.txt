@@ -7,6 +7,11 @@ project(KNearestNeighbors VERSION 0.1)
 # Set source files
 file(GLOB SOURCES src/*.cpp main.cpp)
 
+find_package(wxWidgets REQUIRED COMPONENTS net core base)
+if(wxWidgets_USE_FILE) # not defined in CONFIG mode
+    include(${wxWidgets_USE_FILE})
+endif()
+
 # Set include directories
 include_directories(include)
 
@@ -14,7 +19,7 @@ include_directories(include)
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 # Link libraries
-target_link_libraries(${PROJECT_NAME} m jpeg)
+target_link_libraries(${PROJECT_NAME} m jpeg ${wxWidgets_LIBRARIES})
 
 # Add optimization flags
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -g) # add optimizaion in the future

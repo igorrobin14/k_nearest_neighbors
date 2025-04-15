@@ -1,4 +1,5 @@
 #include <iostream>
+#include "KNearestNeighbors.hpp"
 
 int main()
 {
